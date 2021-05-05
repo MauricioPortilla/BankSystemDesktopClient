@@ -1,19 +1,24 @@
-unit Models;
+unit Cards;
 
 interface
 
+uses
+  Enums;
+
 type
-  Card = class abstract
+  TCard = class abstract
     protected
       _cardNumber: string;
       _cvv: integer;
       _expirationDate: TDate;
       _pin: integer;
       _createdAt: TDateTime;
+      _status: CARD_STATUS;
     public
       function GetCardNumber(): string;
   end;
-  DebitCard = class(Card)
+
+  TDebitCard = class(TCard)
     private
       _balance: double;
     public
@@ -23,10 +28,12 @@ type
         const expDate: TDate;
         const pin: integer;
         const createdAt: TDateTime;
+        const status: CARD_STATUS;
         const balance: double
       );
   end;
-  CreditCard = class(Card)
+  
+  TCreditCard = class(TCard)
     private
       _credit: double;
       _payday: integer;
@@ -38,6 +45,7 @@ type
         const expDate: TDate;
         const pin: integer;
         const createdAt: TDateTime;
+        const status: CARD_STATUS;
         const credit: double;
         const payday: integer;
         const positiveBalance: double
@@ -46,12 +54,13 @@ type
 
 implementation
 
-constructor DebitCard.Create(
+constructor TDebitCard.Create(
   const cardNumber: string;
   const cvv: integer;
   const expDate: TDate;
   const pin: integer;
   const createdAt: TDateTime;
+  const status: CARD_STATUS;
   const balance: double
 );
 begin
@@ -60,20 +69,22 @@ begin
   _expirationDate := expDate;
   _pin := pin;
   _createdAt := createdAt;
+  _status := status;
   _balance := balance;
 end;
 
-function Card.GetCardNumber;
+function TCard.GetCardNumber;
 begin
   Result := _cardNumber;
 end;
 
-constructor CreditCard.Create(
+constructor TCreditCard.Create(
   const cardNumber: string;
   const cvv: integer;
   const expDate: TDate;
   const pin: integer;
   const createdAt: TDateTime;
+  const status: CARD_STATUS;
   const credit: double;
   const payday: integer;
   const positiveBalance: double
@@ -84,6 +95,7 @@ begin
   _expirationDate := expDate;
   _pin := pin;
   _createdAt := createdAt;
+  _status := status;
   _credit := credit;
   _payday := payday;
   _positiveBalance := positiveBalance;

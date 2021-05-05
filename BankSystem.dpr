@@ -5,7 +5,9 @@ uses
   LoginScreen in 'LoginScreen.pas' {LoginForm},
   CreateTransactionSetCardNumber in 'CreateTransactionSetCardNumber.pas' {CreateTransactionSetCardNumberForm},
   CreateTransactionSelectType in 'CreateTransactionSelectType.pas' {CreateTransactionSelectTypeForm},
-  Models in 'Models.pas';
+  Cards in 'Models\Cards.pas',
+  Transaction in 'Models\Transaction.pas',
+  HttpRest in 'Network\HttpRest.pas';
 
 {$R *.res}
 

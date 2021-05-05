@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, RegularExpressions, CreateTransactionSelectType,
-  Models;
+  Cards, Enums;
 
 type
   TCreateTransactionSetCardNumberForm = class(TForm)
@@ -31,7 +31,7 @@ procedure TCreateTransactionSetCardNumberForm.ContinueButtonClick(
   Sender: TObject);
 var
   createTransactionSelectTypeForm: TCreateTransactionSelectTypeForm;
-  card: DebitCard;
+  card: TDebitCard;
 begin
   if CardNumberTF.Text = '' then
   begin
@@ -44,7 +44,7 @@ begin
     exit;
   end;
   // TODO: SEND REQUEST TO CHECK CARD NUMBER.
-  card := DebitCard.Create(CardNumberTF.Text, 0, EncodeDate(2000, 2, 9), 0, EncodeDate(2000, 2, 9), 0.0);
+  card := TDebitCard.Create(CardNumberTF.Text, 0, EncodeDate(2000, 2, 9), 0, EncodeDate(2000, 2, 9), CARD_STATUS.ACTIVE, 0.0);
   createTransactionSelectTypeForm := TCreateTransactionSelectTypeForm.Create(Application, card);
   createTransactionSelectTypeForm.ShowModal;
   createTransactionSelectTypeForm.Release;

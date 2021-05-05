@@ -35,6 +35,7 @@ object CreateTransactionSelectTypeForm: TCreateTransactionSelectTypeForm
     Height = 25
     Caption = 'Abonar dinero'
     TabOrder = 0
+    OnClick = DepositButtonClick
   end
   object WithdrawButton: TButton
     Left = 248
