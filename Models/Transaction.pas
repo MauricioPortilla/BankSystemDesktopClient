@@ -8,6 +8,7 @@ uses
 type
   TTransaction = class
     private
+      _type: TRANSACTION_TYPE;
       _createdAt: TDateTime;
       _amount: double;
       _reference: string;
@@ -17,6 +18,7 @@ type
       _status: TRANSACTION_STATUS;
     public
       constructor Create(
+        const transactionType: TRANSACTION_TYPE;
         const createdAt: TDateTime;
         const amount: double;
         const reference: string;
@@ -31,6 +33,7 @@ type
 implementation
 
 constructor TTransaction.Create(
+  const transactionType: TRANSACTION_TYPE;
   const createdAt: TDateTime;
   const amount: double;
   const reference: string;
@@ -40,6 +43,7 @@ constructor TTransaction.Create(
   const status: TRANSACTION_STATUS
 );
 begin
+  _type := transactionType;
   _createdAt := createdAt;
   _amount := amount;
   _reference := reference;

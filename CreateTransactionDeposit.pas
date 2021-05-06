@@ -23,7 +23,7 @@ type
   private
     _card: TCard;
   public
-    constructor Create(AOwner: TComponent; const card: TCard);
+    constructor Create(AOwner: TComponent; const card: TCard); reintroduce; overload;
   end;
 
 var
@@ -54,11 +54,14 @@ begin
     exit;
   end;
   newTransaction := TTransaction.Create(
+    TRANSACTION_TYPE.DEPOSIT,
     EncodeDate(2000, 2, 9),
     StrToFloat(AmountTF.Text),
     ReferenceTF.Text,
-    ConceptTF.Text, 0.0, 0.0,
-    TRANSACTION_STATUS.PAID
+    ConceptTF.Text,
+    NULL,
+    NULL,
+    NULL
   );
   if newTransaction.Save then
     ShowMessage('Transacción registrada.')

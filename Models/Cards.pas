@@ -32,12 +32,27 @@ type
         const balance: double
       );
   end;
+
+  TCreditCardType = class
+    private
+      _fundingLevel: string;
+      _interestRate: double;
+      _credit: double;
+    public
+      constructor Create(
+        const fundingLevel: string;
+        const interestRate: double;
+        const credit: double
+      );
+      property InterestRate: double read _interestRate;
+  end;
   
   TCreditCard = class(TCard)
     private
       _credit: double;
       _payday: integer;
       _positiveBalance: double;
+      _creditCardType: TCreditCardType;
     public
       constructor Create(
         const cardNumber: string;
@@ -48,8 +63,10 @@ type
         const status: CARD_STATUS;
         const credit: double;
         const payday: integer;
-        const positiveBalance: double
+        const positiveBalance: double;
+        const creditCardType: TCreditCardType
       );
+      property CreditCardType: TCreditCardType read _creditCardType;
   end;
 
 implementation
@@ -87,7 +104,8 @@ constructor TCreditCard.Create(
   const status: CARD_STATUS;
   const credit: double;
   const payday: integer;
-  const positiveBalance: double
+  const positiveBalance: double;
+  const creditCardType: TCreditCardType
 );
 begin
   _cardNumber := cardNumber;
@@ -99,6 +117,18 @@ begin
   _credit := credit;
   _payday := payday;
   _positiveBalance := positiveBalance;
+  _creditCardType := creditCardType;
+end;
+
+constructor TCreditCardType.Create(
+  const fundingLevel: string;
+  const interestRate: double;
+  const credit: double
+);
+begin
+  _fundingLevel := fundingLevel;
+  _interestRate := interestRate;
+  _credit := credit;
 end;
 
 end.

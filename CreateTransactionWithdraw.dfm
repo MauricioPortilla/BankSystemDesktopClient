@@ -1,7 +1,7 @@
-object CreateTransactionSelectTypeForm: TCreateTransactionSelectTypeForm
+object CreateTransactionWithdrawForm: TCreateTransactionWithdrawForm
   Left = 0
   Top = 0
-  Caption = 'Registrar transacci'#243'n'
+  Caption = 'Registrar transacci'#243'n - Retirar dinero'
   ClientHeight = 299
   ClientWidth = 635
   Color = clBtnFace
@@ -14,45 +14,49 @@ object CreateTransactionSelectTypeForm: TCreateTransactionSelectTypeForm
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object CardNumberTitleLabel: TLabel
-    Left = 8
-    Top = 48
-    Width = 95
-    Height = 13
-    Caption = 'N'#250'mero de cuenta: '
-  end
   object CardNumberLabel: TLabel
     Left = 104
-    Top = 48
+    Top = 40
     Width = 105
     Height = 13
     Caption = '0000 0000 0000 0000'
   end
-  object DepositButton: TButton
-    Left = 112
-    Top = 104
-    Width = 75
-    Height = 25
-    Caption = 'Abonar dinero'
+  object CardNumberTitleLabel: TLabel
+    Left = 8
+    Top = 40
+    Width = 95
+    Height = 13
+    Caption = 'N'#250'mero de cuenta: '
+  end
+  object Label1: TLabel
+    Left = 227
+    Top = 72
+    Width = 72
+    Height = 13
+    Caption = 'Monto a retirar'
+  end
+  object AmountTF: TEdit
+    Left = 227
+    Top = 91
+    Width = 182
+    Height = 21
     TabOrder = 0
-    OnClick = DepositButtonClick
   end
   object WithdrawButton: TButton
-    Left = 248
-    Top = 104
+    Left = 280
+    Top = 128
     Width = 75
     Height = 25
-    Caption = 'Retirar dinero'
+    Caption = 'Retirar'
     TabOrder = 1
     OnClick = WithdrawButtonClick
   end
-  object MonthlyPaymentButton: TButton
-    Left = 376
-    Top = 104
-    Width = 113
+  object BackButton: TButton
+    Left = 280
+    Top = 159
+    Width = 75
     Height = 25
-    Caption = 'Pagar mensualidad'
+    Caption = 'Volver'
     TabOrder = 2
-    OnClick = MonthlyPaymentButtonClick
   end
 end

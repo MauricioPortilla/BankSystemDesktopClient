@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Cards, CreateTransactionDeposit;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Cards, CreateTransactionDeposit,
+  CreateTransactionWithdraw, CreateTransactionMonthlyPayment;
 
 type
   TCreateTransactionSelectTypeForm = class(TForm)
@@ -15,10 +16,12 @@ type
     CardNumberLabel: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure DepositButtonClick(Sender: TObject);
+    procedure WithdrawButtonClick(Sender: TObject);
+    procedure MonthlyPaymentButtonClick(Sender: TObject);
   private
     _card: TCard;
   public
-    constructor Create(AOwner: TComponent; const card: TCard);
+    constructor Create(AOwner: TComponent; const card: TCard); reintroduce; overload;
   end;
 
 var
@@ -55,6 +58,25 @@ begin
     CardNumberLabel.Caption := (_card as TCreditCard).GetCardNumber;
     DepositButton.Enabled := false;
   end
+end;
+
+procedure TCreateTransactionSelectTypeForm.MonthlyPaymentButtonClick(
+  Sender: TObject);
+var
+  form: TCreateTransactionMonthlyPaymentForm;
+begin
+  form := TCreateTransactionMonthlyPaymentForm.Create(Application, _card);
+  form.ShowModal;
+  form.Release;
+end;
+
+procedure TCreateTransactionSelectTypeForm.WithdrawButtonClick(Sender: TObject);
+var
+  form: TCreateTransactionWithdrawForm;
+begin
+  form := TCreateTransactionWithdrawForm.Create(Application, _card);
+  form.ShowModal;
+  form.Release;
 end;
 
 end.

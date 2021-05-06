@@ -31,7 +31,7 @@ procedure TCreateTransactionSetCardNumberForm.ContinueButtonClick(
   Sender: TObject);
 var
   createTransactionSelectTypeForm: TCreateTransactionSelectTypeForm;
-  card: TDebitCard;
+  card: TCreditCard;
 begin
   if CardNumberTF.Text = '' then
   begin
@@ -43,8 +43,19 @@ begin
     ShowMessage('Debes introducir datos válidos');
     exit;
   end;
-  // TODO: SEND REQUEST TO CHECK CARD NUMBER.
-  card := TDebitCard.Create(CardNumberTF.Text, 0, EncodeDate(2000, 2, 9), 0, EncodeDate(2000, 2, 9), CARD_STATUS.ACTIVE, 0.0);
+  // TODO: SEND REQUEST TO CHECK CARD NUMBER AND GET CARD DEPENDING OF CARD TYPE. CREDIT CARD TYPE SHOULD BE RETRIEVED TOO.
+  card := TCreditCard.Create(
+    CardNumberTF.Text,
+    0,
+    EncodeDate(2000, 2, 9),
+    0,
+    EncodeDate(2000, 2, 9),
+    CARD_STATUS.ACTIVE,
+    0.0,
+    15,
+    0,
+    TCreditCardType.Create('type', 0.015, 8000)
+  );
   createTransactionSelectTypeForm := TCreateTransactionSelectTypeForm.Create(Application, card);
   createTransactionSelectTypeForm.ShowModal;
   createTransactionSelectTypeForm.Release;
