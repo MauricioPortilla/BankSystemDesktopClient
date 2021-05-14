@@ -10,7 +10,9 @@ uses
   HttpRest in 'Network\HttpRest.pas',
   CreateTransactionDeposit in 'CreateTransactionDeposit.pas' {CreateTransactionDepositForm},
   CreateTransactionWithdraw in 'CreateTransactionWithdraw.pas' {CreateTransactionWithdrawForm},
-  CreateTransactionMonthlyPayment in 'CreateTransactionMonthlyPayment.pas' {CreateTransactionMonthlyPaymentForm};
+  CreateTransactionMonthlyPayment in 'CreateTransactionMonthlyPayment.pas' {CreateTransactionMonthlyPaymentForm},
+  SignUpScreen in 'SignUpScreen.pas' {SignUpForm},
+  RegisterCard in 'RegisterCard.pas' {RegisterCardForm};
 
 {$R *.res}
 
@@ -23,5 +25,7 @@ begin
   Application.CreateForm(TCreateTransactionDepositForm, CreateTransactionDepositForm);
   Application.CreateForm(TCreateTransactionWithdrawForm, CreateTransactionWithdrawForm);
   Application.CreateForm(TCreateTransactionMonthlyPaymentForm, CreateTransactionMonthlyPaymentForm);
+  Application.CreateForm(TSignUpForm, SignUpForm);
+  Application.CreateForm(TRegisterCardForm, RegisterCardForm);
   Application.Run;
 end.
