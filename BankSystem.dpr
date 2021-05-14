@@ -12,7 +12,10 @@ uses
   CreateTransactionWithdraw in 'CreateTransactionWithdraw.pas' {CreateTransactionWithdrawForm},
   CreateTransactionMonthlyPayment in 'CreateTransactionMonthlyPayment.pas' {CreateTransactionMonthlyPaymentForm},
   SignUpScreen in 'SignUpScreen.pas' {SignUpForm},
-  RegisterCard in 'RegisterCard.pas' {RegisterCardForm};
+  RegisterCard in 'RegisterCard.pas' {RegisterCardForm},
+  CheckAccount in 'CheckAccount.pas' {CheckAccountForm},
+  CheckAccountStatement in 'CheckAccountStatement.pas' {checkAccountStatementForm},
+  CheckAccountStatementSelectionProcess in 'CheckAccountStatementSelectionProcess.pas' {checkAccountStatementSelectionProcessForm};
 
 {$R *.res}
 
@@ -27,5 +30,8 @@ begin
   Application.CreateForm(TCreateTransactionMonthlyPaymentForm, CreateTransactionMonthlyPaymentForm);
   Application.CreateForm(TSignUpForm, SignUpForm);
   Application.CreateForm(TRegisterCardForm, RegisterCardForm);
+  Application.CreateForm(TCheckAccountForm, CheckAccountForm);
+  Application.CreateForm(TcheckAccountStatementForm, checkAccountStatementForm);
+  Application.CreateForm(TcheckAccountStatementSelectionProcessForm, checkAccountStatementSelectionProcessForm);
   Application.Run;
 end.
