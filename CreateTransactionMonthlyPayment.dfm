@@ -16,14 +16,14 @@ object CreateTransactionMonthlyPaymentForm: TCreateTransactionMonthlyPaymentForm
   TextHeight = 13
   object CardNumberTitleLabel: TLabel
     Left = 8
-    Top = 40
+    Top = 61
     Width = 95
     Height = 13
     Caption = 'N'#250'mero de cuenta: '
   end
   object CardNumberLabel: TLabel
     Left = 104
-    Top = 40
+    Top = 61
     Width = 105
     Height = 13
     Caption = '0000 0000 0000 0000'
@@ -80,7 +80,7 @@ object CreateTransactionMonthlyPaymentForm: TCreateTransactionMonthlyPaymentForm
   object SubtotalInterestRateLabel: TLabel
     Left = 151
     Top = 241
-    Width = 30
+    Width = 28
     Height = 13
     Caption = '$0.00'
   end
@@ -114,6 +114,7 @@ object CreateTransactionMonthlyPaymentForm: TCreateTransactionMonthlyPaymentForm
     Height = 25
     Caption = 'Volver'
     TabOrder = 1
+    OnClick = BackButtonClick
   end
   object AmountTF: TEdit
     Left = 8
@@ -124,9 +125,9 @@ object CreateTransactionMonthlyPaymentForm: TCreateTransactionMonthlyPaymentForm
   end
   object TransactionsListView: TListView
     Left = 8
-    Top = 59
+    Top = 80
     Width = 601
-    Height = 150
+    Height = 129
     Columns = <
       item
         Caption = 'Mes'
@@ -142,5 +143,42 @@ object CreateTransactionMonthlyPaymentForm: TCreateTransactionMonthlyPaymentForm
       end>
     TabOrder = 3
     ViewStyle = vsReport
+  end
+  object BankSystemPanel: TPanel
+    Left = 0
+    Top = 0
+    Width = 635
+    Height = 49
+    Align = alTop
+    Color = 1974250
+    ParentBackground = False
+    TabOrder = 4
+    object Label6: TLabel
+      Left = 16
+      Top = 10
+      Width = 124
+      Height = 23
+      Caption = 'Bank System'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -20
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
+    end
+    object AccountNameLabel: TLabel
+      Left = 521
+      Top = 14
+      Width = 99
+      Height = 18
+      Alignment = taRightJustify
+      Caption = 'Atendiendo: '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -16
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
+    end
   end
 end

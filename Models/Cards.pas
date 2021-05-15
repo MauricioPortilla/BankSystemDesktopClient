@@ -8,6 +8,7 @@ uses
 type
   TCard = class abstract
     protected
+      _cardId: integer;
       _cardNumber: string;
       _cvv: integer;
       _expirationDate: TDate;
@@ -15,6 +16,7 @@ type
       _createdAt: TDateTime;
       _status: CARD_STATUS;
     public
+      property CardId: integer read _cardId write _cardId;
       function GetCardNumber(): string;
   end;
 
@@ -23,6 +25,7 @@ type
       _balance: double;
     public
       constructor Create(
+        const cardId: integer;
         const cardNumber: string;
         const cvv: integer;
         const expDate: TDate;
@@ -55,6 +58,7 @@ type
       _creditCardType: TCreditCardType;
     public
       constructor Create(
+        const cardId: integer;
         const cardNumber: string;
         const cvv: integer;
         const expDate: TDate;
@@ -72,6 +76,7 @@ type
 implementation
 
 constructor TDebitCard.Create(
+  const cardId: integer;
   const cardNumber: string;
   const cvv: integer;
   const expDate: TDate;
@@ -81,6 +86,7 @@ constructor TDebitCard.Create(
   const balance: double
 );
 begin
+  _cardId := cardId;
   _cardNumber := cardNumber;
   _cvv := cvv;
   _expirationDate := expDate;
@@ -96,6 +102,7 @@ begin
 end;
 
 constructor TCreditCard.Create(
+  const cardId: integer;
   const cardNumber: string;
   const cvv: integer;
   const expDate: TDate;
@@ -108,6 +115,7 @@ constructor TCreditCard.Create(
   const creditCardType: TCreditCardType
 );
 begin
+  _cardId := cardId;
   _cardNumber := cardNumber;
   _cvv := cvv;
   _expirationDate := expDate;

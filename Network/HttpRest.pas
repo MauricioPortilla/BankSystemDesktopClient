@@ -3,31 +3,81 @@ unit HttpRest;
 interface
 
 uses
-  System.JSON, IdHTTP;
+  System.JSON, IdHTTP, System.Classes, System.SysUtils;
+
+const
+  apiUrl: string = 'http://localhost/Backend-BankSystem/public/api/v1';
 
 type
+  THttpResponse = class
+    public
+      Status: string;
+      Data: TJSONValue;
+      Message: string;
+      constructor Create(response: TJSONObject);
+      function Success(): boolean;
+  end;
+
   THttpRest = class abstract
     public
-      class function SendPost(const resource: string; const jsonData: TJsonObject): string;
+      class var Token: string;
+      class function SendGet(const resource: string): THttpResponse;
+      class function SendPost(const resource: string; const jsonData: TJSONObject): THttpResponse;
   end;
 
 implementation
 
-class function THttpRest.SendPost(const resource: string; const jsonData: TJSONObject): string;
+class function THttpRest.SendGet(const resource: string): THttpResponse;
 var
   http: TIdHTTP;
-  apiUrl: string;
+  response: string;
 begin
-  apiUrl := 'http://localhost/api/v1';
   http := TIdHttp.Create;
-  http.Request.ContentType := 'application/json';
-  http.Request.CustomHeaders.AddValue('Authorization', 'JWT TOKEN HERE');
+  http.Request.Accept := 'application/json';
+  http.Request.CustomHeaders.AddValue('Authorization', Token);
   try
-    Result := http.Post(apiUrl + resource, jsonData.ToString);
+    response := http.Get(apiUrl + resource);
+    Result := THttpResponse.Create(
+      TJSONObject.ParseJSONValue(response) as TJSONObject
+    );
   finally
     http.Free;
-    jsonData.Free;
   end;
 end;
 
+class function THttpRest.SendPost(const resource: string; const jsonData: TJSONObject): THttpResponse;
+var
+  http: TIdHTTP;
+  response: string;
+  jsonStream: TStringStream;
+begin
+  http := TIdHttp.Create;
+  http.Request.Accept := 'application/json';
+  http.Request.ContentType := 'application/json';
+  http.Request.CustomHeaders.AddValue('Authorization', Token);
+  try
+    jsonStream := TStringStream.Create(jsonData.ToString, TEncoding.UTF8);
+    response := http.Post(apiUrl + resource, jsonStream);
+    Result := THttpResponse.Create(
+      TJSONObject.ParseJSONValue(response) as TJSONObject
+    );
+  except
+    on ex: EIdHTTPProtocolException do begin
+      if ex.ErrorCode <> 200 then
+        raise Exception.Create(ex.ErrorMessage);
+    end
+  end;
+end;
+
+constructor THttpResponse.Create(response: TJSONObject);
+begin
+  Status := response.GetValue('status').Value;
+  response.TryGetValue('data', Data);
+  response.TryGetValue('message', Message);
+end;
+
+function THttpResponse.Success;
+begin
+  Result := Status = 'success';
+end;
 end.

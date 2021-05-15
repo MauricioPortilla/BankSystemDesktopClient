@@ -11,6 +11,7 @@ object CreateTransactionSetCardNumberForm: TCreateTransactionSetCardNumberForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object CardNumberLabel: TLabel
@@ -25,6 +26,7 @@ object CreateTransactionSetCardNumberForm: TCreateTransactionSetCardNumberForm
     Top = 120
     Width = 233
     Height = 21
+    MaxLength = 16
     TabOrder = 0
   end
   object ContinueButton: TButton
@@ -43,5 +45,43 @@ object CreateTransactionSetCardNumberForm: TCreateTransactionSetCardNumberForm
     Height = 25
     Caption = 'Volver'
     TabOrder = 2
+    OnClick = BackButtonClick
+  end
+  object BankSystemPanel: TPanel
+    Left = 0
+    Top = 0
+    Width = 635
+    Height = 49
+    Align = alTop
+    Color = 1974250
+    ParentBackground = False
+    TabOrder = 3
+    object Label2: TLabel
+      Left = 16
+      Top = 10
+      Width = 124
+      Height = 23
+      Caption = 'Bank System'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -20
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
+    end
+    object AccountNameLabel: TLabel
+      Left = 521
+      Top = 14
+      Width = 99
+      Height = 18
+      Alignment = taRightJustify
+      Caption = 'Atendiendo: '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -16
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
+    end
   end
 end

@@ -16,14 +16,14 @@ object CreateTransactionWithdrawForm: TCreateTransactionWithdrawForm
   TextHeight = 13
   object CardNumberLabel: TLabel
     Left = 104
-    Top = 40
+    Top = 55
     Width = 105
     Height = 13
     Caption = '0000 0000 0000 0000'
   end
   object CardNumberTitleLabel: TLabel
     Left = 8
-    Top = 40
+    Top = 55
     Width = 95
     Height = 13
     Caption = 'N'#250'mero de cuenta: '
@@ -58,5 +58,43 @@ object CreateTransactionWithdrawForm: TCreateTransactionWithdrawForm
     Height = 25
     Caption = 'Volver'
     TabOrder = 2
+    OnClick = BackButtonClick
+  end
+  object BankSystemPanel: TPanel
+    Left = 0
+    Top = 0
+    Width = 635
+    Height = 49
+    Align = alTop
+    Color = 1974250
+    ParentBackground = False
+    TabOrder = 3
+    object Label6: TLabel
+      Left = 16
+      Top = 10
+      Width = 124
+      Height = 23
+      Caption = 'Bank System'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -20
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
+    end
+    object AccountNameLabel: TLabel
+      Left = 521
+      Top = 14
+      Width = 99
+      Height = 18
+      Alignment = taRightJustify
+      Caption = 'Atendiendo: '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -16
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
+    end
   end
 end

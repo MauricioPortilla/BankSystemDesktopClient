@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Vcl.ComCtrls, RegularExpressions, Cards, Transaction, Enums;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Vcl.ComCtrls, RegularExpressions, Cards, Transaction, Enums,
+  Vcl.ExtCtrls, Account;
 
 type
   TCreateTransactionMonthlyPaymentForm = class(TForm)
@@ -24,8 +25,12 @@ type
     InterestRatesSumLabel: TLabel;
     TotalLabel: TLabel;
     TransactionsListView: TListView;
+    BankSystemPanel: TPanel;
+    Label6: TLabel;
+    AccountNameLabel: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure PayButtonClick(Sender: TObject);
+    procedure BackButtonClick(Sender: TObject);
   private
     _card: TCard;
     _minAmount: double;
@@ -48,6 +53,11 @@ implementation
 
 {$R *.dfm}
 
+procedure TCreateTransactionMonthlyPaymentForm.BackButtonClick(Sender: TObject);
+begin
+  Close;
+end;
+
 constructor TCreateTransactionMonthlyPaymentForm.Create(AOwner: TComponent; const card: TCard);
 begin
   inherited Create(AOwner);
@@ -56,6 +66,9 @@ end;
 
 procedure TCreateTransactionMonthlyPaymentForm.FormCreate(Sender: TObject);
 begin
+  if TAccount.Current <> nil then
+    AccountNameLabel.Caption := AccountNameLabel.Caption + TAccount.Current.Name;
+
   if _card is TDebitCard then
   begin
     CardNumberLabel.Caption := (_card as TDebitCard).GetCardNumber;
@@ -95,6 +108,7 @@ begin
   end;
   // NOTE: ALL THE OTHER TRANSACTIONS CHANGES STATUS IN NEW TRANSACTION IF TYPE IS MONTHLY_PAYMENT
   newTransaction := TTransaction.Create(
+    _card.CardId,
     TRANSACTION_TYPE.MONTHLY_PAYMENT,
     EncodeDate(2000, 2, 9),
     StrToFloat(AmountTF.Text),

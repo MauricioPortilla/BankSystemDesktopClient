@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, RegularExpressions, Cards, Transaction, Enums;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, RegularExpressions, Cards, Transaction, Enums,
+  Vcl.ExtCtrls, Account;
 
 type
   TCreateTransactionWithdrawForm = class(TForm)
@@ -14,8 +15,12 @@ type
     AmountTF: TEdit;
     WithdrawButton: TButton;
     BackButton: TButton;
+    BankSystemPanel: TPanel;
+    Label6: TLabel;
+    AccountNameLabel: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure WithdrawButtonClick(Sender: TObject);
+    procedure BackButtonClick(Sender: TObject);
   private
     _card: TCard;
   public
@@ -29,6 +34,11 @@ implementation
 
 {$R *.dfm}
 
+procedure TCreateTransactionWithdrawForm.BackButtonClick(Sender: TObject);
+begin
+  Close;
+end;
+
 constructor TCreateTransactionWithdrawForm.Create(AOwner: TComponent; const card: TCard);
 begin
   inherited Create(AOwner);
@@ -37,6 +47,9 @@ end;
 
 procedure TCreateTransactionWithdrawForm.FormCreate(Sender: TObject);
 begin
+  if TAccount.Current <> nil then
+    AccountNameLabel.Caption := AccountNameLabel.Caption + TAccount.Current.Name;
+
   if _card is TDebitCard then
   begin
     CardNumberLabel.Caption := (_card as TDebitCard).GetCardNumber;
@@ -62,17 +75,21 @@ begin
     exit;
   end;
   newTransaction := TTransaction.Create(
+    _card.CardId,
     TRANSACTION_TYPE.WITHDRAWAL,
     EncodeDate(2000, 2, 9),
     StrToFloat(AmountTF.Text),
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
+    '000000',
+    '',
+    0.0,
+    0.0,
+    TRANSACTION_STATUS.PAID
   );
   if newTransaction.Save then
-    ShowMessage('Transacción registrada.')
+  begin
+    ShowMessage('Transacción registrada.');
+    Close;
+  end
   else
     ShowMessage('Ocurrió un error al realizar esta acción.');
 end;

@@ -8,6 +8,7 @@ uses
 type
   TTransaction = class
     private
+      _cardId: integer;
       _type: TRANSACTION_TYPE;
       _createdAt: TDateTime;
       _amount: double;
@@ -18,6 +19,7 @@ type
       _status: TRANSACTION_STATUS;
     public
       constructor Create(
+        const cardId: integer;
         const transactionType: TRANSACTION_TYPE;
         const createdAt: TDateTime;
         const amount: double;
@@ -33,6 +35,7 @@ type
 implementation
 
 constructor TTransaction.Create(
+  const cardId: integer;
   const transactionType: TRANSACTION_TYPE;
   const createdAt: TDateTime;
   const amount: double;
@@ -43,6 +46,7 @@ constructor TTransaction.Create(
   const status: TRANSACTION_STATUS
 );
 begin
+  _cardId := cardId;
   _type := transactionType;
   _createdAt := createdAt;
   _amount := amount;
@@ -56,19 +60,27 @@ end;
 function TTransaction.Save(): boolean;
 var
   params: TJSONObject;
-  postResult: string;
+  resource: string;
+  postResult: THttpResponse;
 begin
   params := TJSONObject.Create;
-  params.AddPair('createdAt', FormatDateTime('yyyy-mm-dd hh:nn:ss', _createdAt));
+  params.AddPair('originCardId', '');
   params.AddPair('amount', _amount.ToString);
   params.AddPair('reference', _reference);
   params.AddPair('concept', _concept);
-  params.AddPair('interestRate', _interestRate.ToString);
-  params.AddPair('surchargeRate', _surchargeRate.ToString);
   params.AddPair('status', integer(_status).ToString);
-  postResult := THttpRest.SendPost('/transaction/create', params);
-  writeln(postResult);
-  Result := true;
+  if _type = TRANSACTION_TYPE.DEPOSIT then
+    resource := 'deposit'
+  else if _type = TRANSACTION_TYPE.WITHDRAWAL then
+    resource := 'withdraw'
+  else if _type = TRANSACTION_TYPE.MONTHLY_PAYMENT then
+    resource := 'monthlyPayment';
+  try
+    postResult := THttpRest.SendPost('/card/' + _cardId.ToString + '/transaction/' + resource, params);
+    Result := postResult.Success;
+  except
+    Result := false;
+  end;
 end;
 
 end.

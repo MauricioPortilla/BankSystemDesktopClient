@@ -4,8 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Cards, CreateTransactionDeposit,
-  CreateTransactionWithdraw, CreateTransactionMonthlyPayment;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Account, Cards, CreateTransactionDeposit,
+  CreateTransactionWithdraw, CreateTransactionMonthlyPayment, Vcl.ExtCtrls;
 
 type
   TCreateTransactionSelectTypeForm = class(TForm)
@@ -14,6 +14,9 @@ type
     MonthlyPaymentButton: TButton;
     CardNumberTitleLabel: TLabel;
     CardNumberLabel: TLabel;
+    BankSystemPanel: TPanel;
+    Label2: TLabel;
+    AccountNameLabel: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure DepositButtonClick(Sender: TObject);
     procedure WithdrawButtonClick(Sender: TObject);
@@ -48,6 +51,9 @@ end;
 
 procedure TCreateTransactionSelectTypeForm.FormCreate(Sender: TObject);
 begin
+  if TAccount.Current <> nil then
+    AccountNameLabel.Caption := AccountNameLabel.Caption + TAccount.Current.Name;
+
   if _card is TDebitCard then
   begin
     CardNumberLabel.Caption := (_card as TDebitCard).GetCardNumber;

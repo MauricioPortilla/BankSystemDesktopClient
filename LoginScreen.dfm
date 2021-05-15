@@ -1,4 +1,4 @@
-﻿object LoginForm: TLoginForm
+object LoginForm: TLoginForm
   Left = 0
   Top = 0
   Caption = 'Iniciar sesi'#243'n'
@@ -13,19 +13,42 @@
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
-  object correoElectronicoLabel: TLabel
+  object EmailLabel: TLabel
     Left = 208
-    Top = 72
+    Top = 80
     Width = 88
     Height = 13
     Caption = 'Correo Electr'#243'nico'
   end
-  object ContraseñaLabel: TLabel
+  object PasswordLabel: TLabel
     Left = 208
-    Top = 144
+    Top = 152
     Width = 56
     Height = 13
     Caption = 'Contrase'#241'a'
+  end
+  object BankSystemPanel: TPanel
+    Left = 0
+    Top = 0
+    Width = 635
+    Height = 49
+    Align = alTop
+    Color = 1974250
+    ParentBackground = False
+    TabOrder = 3
+    object Label2: TLabel
+      Left = 16
+      Top = 10
+      Width = 124
+      Height = 23
+      Caption = 'Bank System'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -20
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
+    end
   end
   object LoginButton: TButton
     Left = 288
@@ -36,30 +59,19 @@
     TabOrder = 0
     OnClick = LoginButtonClick
   end
-  object CorreoTF: TEdit
+  object EmailTF: TEdit
     Left = 208
     Top = 99
     Width = 217
     Height = 21
     TabOrder = 1
   end
-  object ContraseñaTF: TEdit
+  object PasswordTF: TEdit
     Left = 208
     Top = 171
     Width = 217
     Height = 21
+    PasswordChar = '*'
     TabOrder = 2
-  end
-  object BankSystemPanel: TPanel
-    Left = 0
-    Top = 0
-    Width = 635
-    Height = 41
-    Align = alTop
-    Color = 1974250
-    ParentBackground = False
-    TabOrder = 3
-    ExplicitLeft = 104
-    ExplicitTop = 250
   end
 end

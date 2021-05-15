@@ -16,14 +16,14 @@ object CreateTransactionSelectTypeForm: TCreateTransactionSelectTypeForm
   TextHeight = 13
   object CardNumberTitleLabel: TLabel
     Left = 8
-    Top = 48
+    Top = 64
     Width = 95
     Height = 13
     Caption = 'N'#250'mero de cuenta: '
   end
   object CardNumberLabel: TLabel
     Left = 104
-    Top = 48
+    Top = 64
     Width = 105
     Height = 13
     Caption = '0000 0000 0000 0000'
@@ -54,5 +54,42 @@ object CreateTransactionSelectTypeForm: TCreateTransactionSelectTypeForm
     Caption = 'Pagar mensualidad'
     TabOrder = 2
     OnClick = MonthlyPaymentButtonClick
+  end
+  object BankSystemPanel: TPanel
+    Left = 0
+    Top = 0
+    Width = 635
+    Height = 49
+    Align = alTop
+    Color = 1974250
+    ParentBackground = False
+    TabOrder = 3
+    object Label2: TLabel
+      Left = 16
+      Top = 10
+      Width = 124
+      Height = 23
+      Caption = 'Bank System'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -20
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
+    end
+    object AccountNameLabel: TLabel
+      Left = 521
+      Top = 14
+      Width = 99
+      Height = 18
+      Alignment = taRightJustify
+      Caption = 'Atendiendo: '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -16
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
+    end
   end
 end
