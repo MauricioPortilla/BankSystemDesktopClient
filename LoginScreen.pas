@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, CreateTransactionSetCardNumber,
-  Vcl.ExtCtrls, Account, HttpRest;
+  Vcl.ExtCtrls, Account, HttpRest, Enums, RegularExpressions;
 
 type
   TLoginForm = class(TForm)
@@ -35,18 +35,31 @@ var
   account: TAccount;
   createTransactionForm: TCreateTransactionSetCardNumberForm;
 begin
-  // TODO: VALIDATE FIELDS DATA.
-  account := TAccount.Create(EmailTF.Text, PasswordTF.Text);
-  if account.Load then
+  if (EmailTF.Text = '') or (PasswordTF.Text = '') then
   begin
+    ShowMessage('Faltan campos por completar.');
+    exit;
+  end;
+  if not TRegEx.IsMatch(EmailTF.Text, '^[a-zA-Z0-9_]+@[a-zA-Z0-9]+.[a-zA-Z]+$') then
+  begin
+    ShowMessage('Debes introducir datos válidos.');
+    exit;
+  end;
+  account := TAccount.Create(EmailTF.Text, PasswordTF.Text);
+  try
+    account.Load;
     TAccount.Current := account;
-    createTransactionForm := TCreateTransactionSetCardNumberForm.Create(nil);
-    createTransactionForm.ShowModal;
-    createTransactionForm.Release;
-  end
-  else
-    // TODO: Improve Load method to check if the error occurred because of bad password or server error.
-    ShowMessage('Ocurrió un error al realizar esta acción.');
+    if account.Role = ROLE_TYPE.CASHIER then
+    begin
+      createTransactionForm := TCreateTransactionSetCardNumberForm.Create(nil);
+      createTransactionForm.ShowModal;
+      createTransactionForm.Release;
+    end;
+  except
+    on ex: Exception do begin
+      ShowMessage(ex.Message);
+    end;
+  end;
 end;
 
 end.

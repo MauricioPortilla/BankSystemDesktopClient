@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Vcl.ComCtrls, RegularExpressions, Cards, Transaction, Enums,
-  Vcl.ExtCtrls, Account;
+  Vcl.ExtCtrls, Account, System.JSON;
 
 type
   TCreateTransactionMonthlyPaymentForm = class(TForm)
@@ -34,12 +34,11 @@ type
   private
     _card: TCard;
     _minAmount: double;
-    _surchargeRate: double;
   public
     constructor Create(AOwner: TComponent; const card: TCard); reintroduce; overload;
     procedure AddTransactionToListView(
       listView: TListView;
-      month: string;
+      dateStr: string;
       debtAmount: double;
       surcharge: double;
       interestRate: double
@@ -65,23 +64,110 @@ begin
 end;
 
 procedure TCreateTransactionMonthlyPaymentForm.FormCreate(Sender: TObject);
+var
+  data: TJSONValue;
+  totals: TJSONValue;
+  sumStack: TJSONArray;
+  I: Integer;
+  currentSumStackItem: TJSONValue;
+  hasInit: boolean;
+  hasInsertedLastPayment: boolean;
+  currentPayment: TJSONValue;
+  currentPaymentSurcharge: double;
+  currentPaymentInterest: double;
 begin
+  hasInit := false;
+  hasInsertedLastPayment := false;
+  currentPaymentSurcharge := 0.0;
+  currentPaymentInterest := 0.0;
   if TAccount.Current <> nil then
     AccountNameLabel.Caption := AccountNameLabel.Caption + TAccount.Current.Name;
-
+  if _card = nil then
+    exit;
   if _card is TDebitCard then
   begin
-    CardNumberLabel.Caption := (_card as TDebitCard).CardNumber;
+    Close;
+    exit;
   end
   else if _card is TCreditCard then
   begin
     CardNumberLabel.Caption := (_card as TCreditCard).CardNumber;
   end;
-  // TODO: RETRIEVE CURRENT SURCHARGE RATE FROM API REST
-  // TODO: RETRIEVE TRANSACTIONS FROM API REST
   TransactionsListView.Items.BeginUpdate;
-  AddTransactionToListView(TransactionsListView, 'Marzo', 500, 25, 7.5);
-  AddTransactionToListView(TransactionsListView, 'Abril', 150, 0, 0);
+  try
+    data := (_card as TCreditCard).GetDebt;
+    totals := data.FindValue('data');
+    sumStack := (data.FindValue('stack') as TJSONArray);
+    for I := 0 to sumStack.Count - 1 do
+    begin
+      currentSumStackItem := sumStack.Items[I];
+      if currentSumStackItem.FindValue('type').Value = 'payment' then
+      begin
+        hasInsertedLastPayment := false;
+        if hasInit then
+        begin  
+          AddTransactionToListView(
+            TransactionsListView,
+            currentPayment.FindValue('date').Value,
+            currentPayment.FindValue('amount').Value.ToDouble,
+            currentPaymentSurcharge,
+            currentPaymentInterest
+          );
+          currentPaymentSurcharge := 0.0;
+          currentPaymentInterest := 0.0;
+          hasInsertedLastPayment := true;
+        end;
+        currentPayment := currentSumStackItem;
+        hasInit := true;
+      end
+      else if currentSumStackItem.FindValue('type').Value = 'surcharge' then
+        currentPaymentSurcharge := currentPaymentSurcharge +
+          currentSumStackItem.FindValue('amount').Value.ToDouble()
+      else if currentSumStackItem.FindValue('type').Value = 'interest' then
+        currentPaymentInterest := currentPaymentInterest +
+          currentSumStackItem.FindValue('amount').Value.ToDouble()
+      else if currentSumStackItem.FindValue('type').Value = 'monthly' then
+      begin
+        if not hasInsertedLastPayment then
+        begin
+          AddTransactionToListView(
+            TransactionsListView,
+            currentPayment.FindValue('date').Value,
+            currentPayment.FindValue('amount').Value.ToDouble,
+            currentPaymentSurcharge,
+            currentPaymentInterest
+          );
+          hasInsertedLastPayment := true;
+        end;
+        AddTransactionToListView(
+          TransactionsListView,
+          currentSumStackItem.FindValue('date').Value,
+          currentSumStackItem.FindValue('amount').Value.ToDouble,
+          0.0,
+          0.0
+        );
+      end;
+    end;
+    if not hasInsertedLastPayment then
+      AddTransactionToListView(
+        TransactionsListView,
+        currentPayment.FindValue('date').Value,
+        currentPayment.FindValue('amount').Value.ToDouble,
+        currentPaymentSurcharge,
+        currentPaymentInterest
+      );
+    _minAmount := totals.FindValue('minAmount').Value.ToDouble;  
+    MinAmountLabel.Caption := '$' + _minAmount.ToString;
+    SubtotalLabel.Caption := '$' + totals.FindValue('subtotal').Value;
+    SubtotalInterestRateLabel.Caption := '$' + totals.FindValue('generalInterest').Value;
+    InterestRatesSumLabel.Caption := '$' + totals.FindValue('interest').Value;
+    TotalLabel.Caption := '$' + totals.FindValue('total').Value;
+  except
+    on ex: Exception do begin
+      ShowMessage(ex.Message);
+      Close;
+    end;
+  end;
   TransactionsListView.Items.EndUpdate;
 end;
 
@@ -96,7 +182,7 @@ begin
     ShowMessage('Faltan campos por completar.');
     exit;
   end
-  else if not TRegEx.IsMatch(AmountTF.Text, '[0-9]+') then
+  else if not TRegEx.IsMatch(AmountTF.Text, '^[0-9.]+$') then
   begin
     ShowMessage('Debes introducir datos válidos.');
     exit;
@@ -106,26 +192,30 @@ begin
     ShowMessage('Debes ingresar el monto mínimo indicado.');
     exit;
   end;
-  // NOTE: ALL THE OTHER TRANSACTIONS CHANGES STATUS IN NEW TRANSACTION IF TYPE IS MONTHLY_PAYMENT
   newTransaction := TTransaction.Create(
     _card.CardId,
     TRANSACTION_TYPE.MONTHLY_PAYMENT,
     EncodeDate(2000, 2, 9),
     StrToFloat(AmountTF.Text),
-    NULL,
-    NULL,
+    '000000',
+    '',
     creditCard.CreditCardType.InterestRate,
-    _surchargeRate
+    0.0
   );
-  if newTransaction.Save then
-    ShowMessage('Transacción registrada.')
-  else
-    ShowMessage('Ocurrió un error al realizar esta acción.');
+  try
+    newTransaction.Save;
+    ShowMessage('Transacción registrada.');
+    Close;
+  except
+    on ex: Exception do begin
+      ShowMessage(ex.Message);
+    end;
+  end;
 end;
 
 procedure TCreateTransactionMonthlyPaymentForm.AddTransactionToListView(
   listView: TListView;
-  month: string;
+  dateStr: string;
   debtAmount: double;
   surcharge: double;
   interestRate: double
@@ -134,7 +224,7 @@ var
   listItem: TListItem;
 begin
   listItem := listView.Items.Add;
-  listItem.Caption := month;
+  listItem.Caption := dateStr;
   listItem.SubItems.Add('$' + debtAmount.ToString);
   listItem.SubItems.Add('$' + surcharge.ToString);
   listItem.SubItems.Add('$' + interestRate.ToString);

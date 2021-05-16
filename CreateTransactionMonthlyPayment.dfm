@@ -130,7 +130,7 @@ object CreateTransactionMonthlyPaymentForm: TCreateTransactionMonthlyPaymentForm
     Height = 129
     Columns = <
       item
-        Caption = 'Mes'
+        Caption = 'Fecha'
       end
       item
         Caption = 'Monto adeudado'

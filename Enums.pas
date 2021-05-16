@@ -21,6 +21,12 @@ type
     MONTHLY_PAYMENT = 4,
     SURCHARGE_PAYMENT = 5
   );
+  ROLE_TYPE = (
+    CLIENT = 0,
+    EXECUTIVE = 1,
+    BRANCH_MANAGER = 2,
+    CASHIER = 3
+  );
 
 implementation
 

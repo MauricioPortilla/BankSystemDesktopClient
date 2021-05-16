@@ -73,13 +73,15 @@ begin
     0.0,
     0.0
   );
-  if newTransaction.Save then
-  begin
+  try
+    newTransaction.Save;
     ShowMessage('Transacción registrada.');
     Close;
-  end
-  else
-    ShowMessage('Ocurrió un error al realizar esta acción.');
+  except
+    on ex: Exception do begin
+      ShowMessage(ex.Message);
+    end;
+  end;
 end;
 
 procedure TCreateTransactionDepositForm.FormCreate(Sender: TObject);

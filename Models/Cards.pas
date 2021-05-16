@@ -3,7 +3,7 @@ unit Cards;
 interface
 
 uses
-  Enums, HttpRest, System.Classes, System.SysUtils;
+  Enums, HttpRest, System.Classes, System.SysUtils, System.JSON;
 
 type
   TCard = class abstract
@@ -54,7 +54,6 @@ type
   TCreditCard = class(TCard)
     private
       _credit: double;
-      _payday: integer;
       _positiveBalance: double;
       _creditCardType: TCreditCardType;
     public
@@ -67,11 +66,11 @@ type
         const createdAt: TDateTime;
         const status: CARD_STATUS;
         const credit: double;
-        const payday: integer;
         const positiveBalance: double;
         const creditCardType: TCreditCardType
       );
       property CreditCardType: TCreditCardType read _creditCardType;
+      function GetDebt(): TJSONValue;
   end;
 
 implementation
@@ -95,7 +94,6 @@ begin
       StrToDateTime(request.Data.FindValue('createdAt').Value, format),
       CARD_STATUS(request.Data.FindValue('status').Value.ToInteger),
       request.Data.FindValue('credit').Value.ToDouble,
-      request.Data.FindValue('payday').Value.ToInteger,
       request.Data.FindValue('positiveBalance').Value.ToDouble,
       TCreditCardType.Create('type', 0.015, 8000)
     )
@@ -133,6 +131,17 @@ begin
   _balance := balance;
 end;
 
+constructor TCreditCardType.Create(
+  const fundingLevel: string;
+  const interestRate: double;
+  const credit: double
+);
+begin
+  _fundingLevel := fundingLevel;
+  _interestRate := interestRate;
+  _credit := credit;
+end;
+
 constructor TCreditCard.Create(
   const cardId: integer;
   const cardNumber: string;
@@ -142,7 +151,6 @@ constructor TCreditCard.Create(
   const createdAt: TDateTime;
   const status: CARD_STATUS;
   const credit: double;
-  const payday: integer;
   const positiveBalance: double;
   const creditCardType: TCreditCardType
 );
@@ -155,20 +163,16 @@ begin
   _createdAt := createdAt;
   _status := status;
   _credit := credit;
-  _payday := payday;
   _positiveBalance := positiveBalance;
   _creditCardType := creditCardType;
 end;
 
-constructor TCreditCardType.Create(
-  const fundingLevel: string;
-  const interestRate: double;
-  const credit: double
-);
+function TCreditCard.GetDebt(): TJSONValue;
+var
+  request: THttpResponse;
 begin
-  _fundingLevel := fundingLevel;
-  _interestRate := interestRate;
-  _credit := credit;
+  request := THttpRest.SendGet('/card/' + _cardNumber + '/getDebt');
+  Result := request.Data;
 end;
 
 end.

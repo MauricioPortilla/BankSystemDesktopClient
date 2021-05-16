@@ -27,7 +27,7 @@ type
         const interestRate: double;
         const surchargeRate: double
       );
-      function Save(): boolean;
+      procedure Save;
   end;
 
 implementation
@@ -53,7 +53,7 @@ begin
   _surchargeRate := surchargeRate;
 end;
 
-function TTransaction.Save(): boolean;
+procedure TTransaction.Save;
 var
   params: TJSONObject;
   resource: string;
@@ -70,12 +70,7 @@ begin
     resource := 'withdraw'
   else if _type = TRANSACTION_TYPE.MONTHLY_PAYMENT then
     resource := 'monthlyPayment';
-  try
-    postResult := THttpRest.SendPost('/card/' + _cardId.ToString + '/transaction/' + resource, params);
-    Result := postResult.Success;
-  except
-    Result := false;
-  end;
+  postResult := THttpRest.SendPost('/card/' + _cardId.ToString + '/transaction/' + resource, params);
 end;
 
 end.
