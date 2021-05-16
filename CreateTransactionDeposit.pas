@@ -58,7 +58,7 @@ begin
     ShowMessage('Faltan campos por completar.');
     exit;
   end
-  else if not TRegEx.IsMatch(AmountTF.Text, '[0-9]+') or not TRegEx.IsMatch(ReferenceTF.Text, '[0-9]+') then
+  else if not TRegEx.IsMatch(AmountTF.Text, '^[0-9.]+$') or not TRegEx.IsMatch(ReferenceTF.Text, '^[0-9]+$') then
   begin
     ShowMessage('Debes introducir datos válidos.');
     exit;
@@ -71,8 +71,7 @@ begin
     ReferenceTF.Text,
     ConceptTF.Text,
     0.0,
-    0.0,
-    TRANSACTION_STATUS.PAID
+    0.0
   );
   if newTransaction.Save then
   begin
@@ -90,11 +89,11 @@ begin
 
   if _card is TDebitCard then
   begin
-    CardNumberLabel.Caption := (_card as TDebitCard).GetCardNumber;
+    CardNumberLabel.Caption := (_card as TDebitCard).CardNumber;
   end
   else if _card is TCreditCard then
   begin
-    CardNumberLabel.Caption := (_card as TCreditCard).GetCardNumber;
+    CardNumberLabel.Caption := (_card as TCreditCard).CardNumber;
   end
 end;
 

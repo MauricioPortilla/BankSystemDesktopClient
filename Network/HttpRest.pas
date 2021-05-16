@@ -6,7 +6,7 @@ uses
   System.JSON, IdHTTP, System.Classes, System.SysUtils;
 
 const
-  apiUrl: string = 'http://localhost/Backend-BankSystem/public/api/v1';
+  apiUrl: string = 'http://localhost/Laravel_Projects/Backend-BankSystem/public/api/v1';
 
 type
   THttpResponse = class
@@ -14,6 +14,7 @@ type
       Status: string;
       Data: TJSONValue;
       Message: string;
+      Reason: string;
       constructor Create(response: TJSONObject);
       function Success(): boolean;
   end;
@@ -40,8 +41,13 @@ begin
     Result := THttpResponse.Create(
       TJSONObject.ParseJSONValue(response) as TJSONObject
     );
-  finally
-    http.Free;
+  except
+    on ex: EIdHTTPProtocolException do begin
+      if ex.ErrorCode <> 200 then
+        raise Exception.Create(
+          TJSONObject.ParseJSONValue(ex.ErrorMessage).FindValue('reason').Value
+        );
+    end;
   end;
 end;
 
@@ -64,7 +70,9 @@ begin
   except
     on ex: EIdHTTPProtocolException do begin
       if ex.ErrorCode <> 200 then
-        raise Exception.Create(ex.ErrorMessage);
+        raise Exception.Create(
+          TJSONObject.ParseJSONValue(ex.ErrorMessage).FindValue('reason').Value
+        );
     end
   end;
 end;
@@ -74,6 +82,7 @@ begin
   Status := response.GetValue('status').Value;
   response.TryGetValue('data', Data);
   response.TryGetValue('message', Message);
+  response.TryGetValue('reason', Reason);
 end;
 
 function THttpResponse.Success;

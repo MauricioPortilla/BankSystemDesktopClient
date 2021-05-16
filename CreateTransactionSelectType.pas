@@ -56,12 +56,12 @@ begin
 
   if _card is TDebitCard then
   begin
-    CardNumberLabel.Caption := (_card as TDebitCard).GetCardNumber;
+    CardNumberLabel.Caption := (_card as TDebitCard).CardNumber;
     MonthlyPaymentButton.Enabled := false;
   end
   else if _card is TCreditCard then
   begin
-    CardNumberLabel.Caption := (_card as TCreditCard).GetCardNumber;
+    CardNumberLabel.Caption := (_card as TCreditCard).CardNumber;
     DepositButton.Enabled := false;
   end
 end;

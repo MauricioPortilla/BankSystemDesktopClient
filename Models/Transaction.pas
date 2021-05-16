@@ -16,7 +16,6 @@ type
       _concept: string;
       _interestRate: double;
       _surchargeRate: double;
-      _status: TRANSACTION_STATUS;
     public
       constructor Create(
         const cardId: integer;
@@ -26,8 +25,7 @@ type
         const reference: string;
         const concept: string;
         const interestRate: double;
-        const surchargeRate: double;
-        const status: TRANSACTION_STATUS
+        const surchargeRate: double
       );
       function Save(): boolean;
   end;
@@ -42,8 +40,7 @@ constructor TTransaction.Create(
   const reference: string;
   const concept: string;
   const interestRate: double;
-  const surchargeRate: double;
-  const status: TRANSACTION_STATUS
+  const surchargeRate: double
 );
 begin
   _cardId := cardId;
@@ -54,7 +51,6 @@ begin
   _concept := concept;
   _interestRate := interestRate;
   _surchargeRate := surchargeRate;
-  _status := status;
 end;
 
 function TTransaction.Save(): boolean;
@@ -68,7 +64,6 @@ begin
   params.AddPair('amount', _amount.ToString);
   params.AddPair('reference', _reference);
   params.AddPair('concept', _concept);
-  params.AddPair('status', integer(_status).ToString);
   if _type = TRANSACTION_TYPE.DEPOSIT then
     resource := 'deposit'
   else if _type = TRANSACTION_TYPE.WITHDRAWAL then

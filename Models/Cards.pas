@@ -3,7 +3,7 @@ unit Cards;
 interface
 
 uses
-  Enums;
+  Enums, HttpRest, System.Classes, System.SysUtils;
 
 type
   TCard = class abstract
@@ -17,7 +17,8 @@ type
       _status: CARD_STATUS;
     public
       property CardId: integer read _cardId write _cardId;
-      function GetCardNumber(): string;
+      property CardNumber: string read _cardNumber;
+      class function GetByCardNumber(const cardNumber: string): TCard;
   end;
 
   TDebitCard = class(TCard)
@@ -75,6 +76,42 @@ type
 
 implementation
 
+class function TCard.GetByCardNumber(const cardNumber: string): TCard;
+var
+  request: THttpResponse;
+  format: TFormatSettings;
+begin
+  request := THttpRest.SendGet('/card/' + cardNumber + '/get');
+  format := TFormatSettings.Create;
+  format.ShortDateFormat := 'yyyy-mm-dd';
+  format.DateSeparator := '-';
+  if request.Data.FindValue('type').Value.ToInteger = integer(CARD_TYPE.CREDIT) then
+    Result := TCreditCard.Create(
+      request.Data.FindValue('cardId').Value.ToInteger,
+      request.Data.FindValue('cardNumber').Value,
+      0,
+      StrToDateTime(request.Data.FindValue('expirationDate').Value, format),
+      0,
+      StrToDateTime(request.Data.FindValue('createdAt').Value, format),
+      CARD_STATUS(request.Data.FindValue('status').Value.ToInteger),
+      request.Data.FindValue('credit').Value.ToDouble,
+      request.Data.FindValue('payday').Value.ToInteger,
+      request.Data.FindValue('positiveBalance').Value.ToDouble,
+      TCreditCardType.Create('type', 0.015, 8000)
+    )
+  else
+    Result := TDebitCard.Create(
+      request.Data.FindValue('cardId').Value.ToInteger,
+      request.Data.FindValue('cardNumber').Value,
+      0,
+      StrToDateTime(request.Data.FindValue('expirationDate').Value, format),
+      0,
+      StrToDateTime(request.Data.FindValue('createdAt').Value, format),
+      CARD_STATUS(request.Data.FindValue('status').Value.ToInteger),
+      request.Data.FindValue('balance').Value.ToDouble
+    );
+end;
+
 constructor TDebitCard.Create(
   const cardId: integer;
   const cardNumber: string;
@@ -94,11 +131,6 @@ begin
   _createdAt := createdAt;
   _status := status;
   _balance := balance;
-end;
-
-function TCard.GetCardNumber;
-begin
-  Result := _cardNumber;
 end;
 
 constructor TCreditCard.Create(

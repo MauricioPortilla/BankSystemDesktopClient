@@ -15,7 +15,8 @@ uses
   RegisterCard in 'RegisterCard.pas' {RegisterCardForm},
   CheckAccount in 'CheckAccount.pas' {CheckAccountForm},
   CheckAccountStatement in 'CheckAccountStatement.pas' {checkAccountStatementForm},
-  CheckAccountStatementSelectionProcess in 'CheckAccountStatementSelectionProcess.pas' {checkAccountStatementSelectionProcessForm};
+  CheckAccountStatementSelectionProcess in 'CheckAccountStatementSelectionProcess.pas' {checkAccountStatementSelectionProcessForm},
+  Account in 'Models\Account.pas';
 
 {$R *.res}
 

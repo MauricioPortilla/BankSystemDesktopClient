@@ -71,11 +71,11 @@ begin
 
   if _card is TDebitCard then
   begin
-    CardNumberLabel.Caption := (_card as TDebitCard).GetCardNumber;
+    CardNumberLabel.Caption := (_card as TDebitCard).CardNumber;
   end
   else if _card is TCreditCard then
   begin
-    CardNumberLabel.Caption := (_card as TCreditCard).GetCardNumber;
+    CardNumberLabel.Caption := (_card as TCreditCard).CardNumber;
   end;
   // TODO: RETRIEVE CURRENT SURCHARGE RATE FROM API REST
   // TODO: RETRIEVE TRANSACTIONS FROM API REST
@@ -115,8 +115,7 @@ begin
     NULL,
     NULL,
     creditCard.CreditCardType.InterestRate,
-    _surchargeRate,
-    NULL
+    _surchargeRate
   );
   if newTransaction.Save then
     ShowMessage('Transacción registrada.')
