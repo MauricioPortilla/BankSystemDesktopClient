@@ -1,8 +1,8 @@
-object SignUpForm: TSignUpForm
+﻿object SignUpForm: TSignUpForm
   Left = 0
   Top = 0
   Caption = 'Registrar Cuenta'
-  ClientHeight = 408
+  ClientHeight = 409
   ClientWidth = 661
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -20,61 +20,89 @@ object SignUpForm: TSignUpForm
     Height = 13
     Caption = 'Nombre *'
   end
-  object ApellidoPaternoLabel: TLabel
-    Left = 232
+  object ApellidoLabel: TLabel
+    Left = 336
     Top = 64
-    Width = 87
+    Width = 51
     Height = 13
-    Caption = 'Apellido Paterno *'
-  end
-  object ApellidoMaternoLabel: TLabel
-    Left = 432
-    Top = 64
-    Width = 89
-    Height = 13
-    Caption = 'Apellido Materno *'
+    Caption = 'Apellidos *'
   end
   object FechaNacimientoLabel: TLabel
-    Left = 32
-    Top = 144
+    Left = 232
+    Top = 136
     Width = 108
     Height = 13
     Caption = 'Fecha de Nacimiento *'
   end
-  object TelefonoLabel: TLabel
+  object TelefonoCelularLabel: TLabel
     Left = 232
-    Top = 144
-    Width = 51
+    Top = 261
+    Width = 81
     Height = 13
-    Caption = 'Tel'#233'fono *'
+    Caption = 'Tel'#233'fono Celular '
   end
   object CorreoLabel: TLabel
     Left = 432
-    Top = 144
+    Top = 136
     Width = 42
     Height = 13
     Caption = 'Correo *'
   end
-  object DireccionLabel: TLabel
+  object ColoniaLabel: TLabel
     Left = 32
-    Top = 216
-    Width = 52
+    Top = 200
+    Width = 44
     Height = 13
-    Caption = 'Direcci'#243'n *'
+    Caption = 'Colonia *'
   end
   object CodigoPostalLabel: TLabel
-    Left = 432
-    Top = 216
+    Left = 32
+    Top = 261
     Width = 74
     Height = 13
     Caption = 'C'#243'digo Postal *'
   end
   object NombreUsuarioLabel: TLabel
     Left = 32
-    Top = 288
+    Top = 136
     Width = 91
     Height = 13
     Caption = 'Nombre de Usuario'
+  end
+  object ContraseñaLabel: TLabel
+    Left = 32
+    Top = 317
+    Width = 56
+    Height = 13
+    Caption = 'Contrase'#241'a'
+  end
+  object CalleLabel: TLabel
+    Left = 232
+    Top = 200
+    Width = 32
+    Height = 13
+    Caption = 'Calle *'
+  end
+  object NumeroIntLabel: TLabel
+    Left = 550
+    Top = 200
+    Width = 29
+    Height = 13
+    Caption = 'N'#176' Int'
+  end
+  object NumeroExtLabel: TLabel
+    Left = 432
+    Top = 200
+    Width = 40
+    Height = 13
+    Caption = 'N'#176' Ext *'
+  end
+  object TelefonoCasaLabel: TLabel
+    Left = 432
+    Top = 261
+    Width = 51
+    Height = 13
+    Caption = 'Tel'#233'fono *'
   end
   object BankSystemPanel: TPanel
     Left = 0
@@ -89,65 +117,58 @@ object SignUpForm: TSignUpForm
   object NombreTF: TEdit
     Left = 32
     Top = 87
-    Width = 169
+    Width = 273
     Height = 21
     TabOrder = 1
   end
-  object ApellidoPatertoTF: TEdit
-    Left = 232
+  object ApellidoTF: TEdit
+    Left = 336
     Top = 87
-    Width = 169
+    Width = 289
     Height = 21
     TabOrder = 2
   end
-  object ApellidoMaternoTF: TEdit
-    Left = 432
-    Top = 87
-    Width = 193
+  object FechaNacimientoTF: TEdit
+    Left = 232
+    Top = 155
+    Width = 169
     Height = 21
     TabOrder = 3
   end
-  object FechaNacimientoTF: TEdit
-    Left = 32
-    Top = 163
+  object TelefonoCelularTF: TEdit
+    Left = 232
+    Top = 280
     Width = 169
     Height = 21
     TabOrder = 4
   end
-  object TelefonoTF: TEdit
-    Left = 232
-    Top = 163
-    Width = 169
+  object CorreoTF: TEdit
+    Left = 432
+    Top = 155
+    Width = 193
     Height = 21
     TabOrder = 5
   end
-  object CorreoTF: TEdit
-    Left = 432
-    Top = 163
-    Width = 193
+  object ColoniaTF: TEdit
+    Left = 32
+    Top = 219
+    Width = 169
     Height = 21
     TabOrder = 6
   end
-  object DireccionTF: TEdit
+  object CodigoPostalTF: TEdit
     Left = 32
-    Top = 235
-    Width = 369
+    Top = 280
+    Width = 169
     Height = 21
     TabOrder = 7
   end
-  object CodigoPostalTF: TEdit
-    Left = 432
-    Top = 235
-    Width = 193
-    Height = 21
-    TabOrder = 8
-  end
   object NombreUsuarioTF: TEdit
     Left = 32
-    Top = 307
+    Top = 155
     Width = 169
     Height = 21
-    TabOrder = 9
+    TabOrder = 8
   end
   object CrearCuentaBttn: TButton
     Left = 550
@@ -155,6 +176,41 @@ object SignUpForm: TSignUpForm
     Width = 75
     Height = 25
     Caption = 'Crear Cuenta'
+    TabOrder = 9
+  end
+  object ContraseñaTF: TEdit
+    Left = 32
+    Top = 336
+    Width = 169
+    Height = 21
     TabOrder = 10
+  end
+  object CalleTF: TEdit
+    Left = 232
+    Top = 219
+    Width = 169
+    Height = 21
+    TabOrder = 11
+  end
+  object NumeroIntTF: TEdit
+    Left = 550
+    Top = 219
+    Width = 75
+    Height = 21
+    TabOrder = 12
+  end
+  object NumeroExtTF: TEdit
+    Left = 432
+    Top = 219
+    Width = 73
+    Height = 21
+    TabOrder = 13
+  end
+  object TelefonoCasaTF: TEdit
+    Left = 432
+    Top = 280
+    Width = 193
+    Height = 21
+    TabOrder = 14
   end
 end
