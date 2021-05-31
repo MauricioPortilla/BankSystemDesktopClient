@@ -3,7 +3,7 @@ unit Account;
 interface
 
 uses
-  System.JSON, HttpRest, Enums, System.SysUtils;
+  System.JSON, HttpRest, Enums, System.SysUtils, Cards;
 
 type
   TAccount = class
@@ -13,19 +13,15 @@ type
       _lastName: string;
       _email: string;
       _password: string;
-      _nombre: string;
-      _correo: string;
-      _apellido: string;
-      _fechaNacimiento: string;
-      _telefonoCelular: string;
-      _colonia: string;
-      _calle: string;
-      _numeroInt: string;
-      _numeroExt: string;
-      _codigoPostal: string;
-      _nombreUsuario: string;
-      _telefonoCasa: string;
-      _contraseña: string;
+      _birthdate: string;
+      _cellphoneNumber: string;
+      _colony: string;
+      _street: string;
+      _intNumber: string;
+      _extNumber: string;
+      _zipCode: string;
+      _username: string;
+      _homePhone: string;
       _role: ROLE_TYPE;
     public
       class var Current: TAccount;
@@ -34,24 +30,26 @@ type
       constructor Create(
         const email: string;
         const password: string
-      );
-
-      constructor Register(
-        const correo: string;
-        const nombre: string;
-        const apellido: string;
-        const fechaNacimiento: string;
-        const telefonoCelular: string;
-        const colonia: string;
-        const calle: string;
-        const numeroInt: string;
-        const numeroExt: string;
-        const telefonoCasa: string;
-        const codigoPostal: string;
-        const nombreUsuario: string;
-        const contraseña: string
-      );
-   procedure Load;
+      ); overload;
+      procedure Load;
+      procedure Register;
+      function RegisterDebitCard(): TDebitCard;
+    published
+      constructor Create(
+        const email: string;
+        const name: string;
+        const lastName: string;
+        const birthdate: string;
+        const cellphoneNumber: string;
+        const colony: string;
+        const street: string;
+        const intNumber: string;
+        const extNumber: string;
+        const homePhone: string;
+        const zipCode: string;
+        const username: string;
+        const password: string
+      ); overload;
   end;
 
 implementation
@@ -62,21 +60,35 @@ begin
   _password := password;
 end;
 
-constructor TAccount.Register(const correo:string; const nombre: string; const apellido: string; const fechaNacimiento: string; const telefonoCelular: string; const colonia: string; const calle: string; const numeroInt: string; const numeroExt: string; const telefonoCasa: string; const codigoPostal: string; const nombreUsuario: string; const contraseña: string);
+constructor TAccount.Create(
+  const email: string;
+  const name: string;
+  const lastName: string;
+  const birthdate: string;
+  const cellphoneNumber: string;
+  const colony: string;
+  const street: string;
+  const intNumber: string;
+  const extNumber: string;
+  const homePhone: string;
+  const zipCode: string;
+  const username: string;
+  const password: string
+);
 begin
-  _nombre := nombre;
-  _correo:= correo;
-  _apellido:= apellido;
-  _fechaNacimiento:= fechaNacimiento;
-  _telefonoCelular:= telefonoCelular;
-  _colonia:= colonia;
-  _calle:= calle;
-  _numeroInt:= numeroInt;
-  _numeroExt:= numeroExt;
-  _codigoPostal:= codigoPostal;
-  _nombreUsuario:= nombreUsuario;
-  _telefonoCasa := telefonoCasa;
-  _contraseña:= contraseña;
+  _name := name;
+  _email := email;
+  _lastName := lastName;
+  _birthdate := birthdate;
+  _cellphoneNumber := cellphoneNumber;
+  _colony := colony;
+  _street := street;
+  _intNumber := intNumber;
+  _extNumber := extNumber;
+  _zipCode := zipCode;
+  _username := username;
+  _homePhone := homePhone;
+  _password := password;
 end;
 
 procedure TAccount.Load();
@@ -95,6 +107,55 @@ begin
   _lastName := accountData.FindValue('lastName').Value;
   _role := ROLE_TYPE(StrToInt(accountData.FindValue('role').Value));
   THttpRest.Token := 'Bearer ' + postResult.Data.FindValue('token').FindValue('access_token').Value;
+end;
+
+procedure TAccount.Register;
+var
+  params: TJSONObject;
+  postResult: THttpResponse;
+begin
+  params := TJSONObject.Create;
+  params.AddPair('name', _name);
+  params.AddPair('lastName', _lastName);
+  params.AddPair('username', _username);
+  params.AddPair('birthdate', _birthdate);
+  params.AddPair('street', _street);
+  params.AddPair('extNumber', _extNumber);
+  params.AddPair('intNumber', _intNumber);
+  params.AddPair('colony', _colony);
+  params.AddPair('zipCode', _zipCode);
+  params.AddPair('cellphoneNumber', _cellphoneNumber);
+  params.AddPair('homePhone', _homePhone);
+  params.AddPair('email', _email);
+  params.AddPair('password', _password);
+  postResult := THttpRest.SendPost('/account/signUp', params);
+  _id := postResult.Data.FindValue('accountId').Value.ToInteger;
+end;
+
+function TAccount.RegisterDebitCard: TDebitCard;
+var
+  params: TJSONObject;
+  postResult: THttpResponse;
+  format: TFormatSettings;
+  debitCard: TDebitCard;
+begin
+  format := TFormatSettings.Create;
+  format.ShortDateFormat := 'yyyy-mm-dd';
+  format.DateSeparator := '-';
+
+  params := TJSONObject.Create;
+  postResult := THttpRest.SendPost('/account/' + _id.ToString + '/card/debit/register', params);
+  debitCard := TDebitCard.Create(
+    postResult.Data.FindValue('cardId').Value.ToInteger,
+    postResult.Data.FindValue('card').FindValue('cardNumber').Value,
+    postResult.Data.FindValue('card').FindValue('cvv').Value.ToInteger,
+    StrToDate(postResult.Data.FindValue('card').FindValue('expirationDate').Value, format),
+    0,
+    StrToDateTime(postResult.Data.FindValue('card').FindValue('createdAt').Value, format),
+    CARD_STATUS(postResult.Data.FindValue('card').FindValue('status').Value.ToInteger),
+    postResult.Data.FindValue('balance').Value.ToDouble
+  );
+  Result := debitCard;
 end;
 
 end.

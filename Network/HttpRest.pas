@@ -69,9 +69,13 @@ begin
     );
   except
     on ex: EIdHTTPProtocolException do begin
-      if ex.ErrorCode <> 200 then
+      if (ex.ErrorCode <> 200) and (TJSONObject.ParseJSONValue(ex.ErrorMessage).FindValue('reason') <> nil) then
         raise Exception.Create(
           TJSONObject.ParseJSONValue(ex.ErrorMessage).FindValue('reason').Value
+        )
+      else
+        raise Exception.Create(
+          TJSONObject.ParseJSONValue(ex.ErrorMessage).FindValue('message').Value
         );
     end
   end;

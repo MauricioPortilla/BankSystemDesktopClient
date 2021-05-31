@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, CreateTransactionSetCardNumber,
-  Vcl.ExtCtrls, Account, HttpRest, Enums, RegularExpressions;
+  Vcl.ExtCtrls, Account, HttpRest, Enums, RegularExpressions, SignUpScreen;
 
 type
   TLoginForm = class(TForm)
@@ -34,6 +34,7 @@ procedure TLoginForm.LoginButtonClick(Sender: TObject);
 var
   account: TAccount;
   createTransactionForm: TCreateTransactionSetCardNumberForm;
+  signUpForm: TSignUpForm;
 begin
   if (EmailTF.Text = '') or (PasswordTF.Text = '') then
   begin
@@ -54,6 +55,12 @@ begin
       createTransactionForm := TCreateTransactionSetCardNumberForm.Create(nil);
       createTransactionForm.ShowModal;
       createTransactionForm.Release;
+    end
+    else if account.Role = ROLE_TYPE.EXECUTIVE then
+    begin
+      signUpForm := TSignUpForm.Create(nil);
+      signUpForm.ShowModal;
+      signUpForm.Release;
     end;
   except
     on ex: Exception do begin

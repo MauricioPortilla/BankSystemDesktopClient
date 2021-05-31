@@ -37,6 +37,7 @@ object RegisterCardForm: TRegisterCardForm
     Height = 73
     Caption = 'D'#233'bito'
     TabOrder = 1
+    OnClick = TarjetaDebitoBttnClick
   end
   object TarjetaCreditoBttn: TButton
     Left = 344
@@ -45,5 +46,6 @@ object RegisterCardForm: TRegisterCardForm
     Height = 73
     Caption = 'Cr'#233'dito'
     TabOrder = 2
+    OnClick = TarjetaCreditoBttnClick
   end
 end

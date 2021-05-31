@@ -15,14 +15,14 @@
   TextHeight = 13
   object NombreLabel: TLabel
     Left = 32
-    Top = 64
+    Top = 68
     Width = 46
     Height = 13
     Caption = 'Nombre *'
   end
   object ApellidoLabel: TLabel
     Left = 336
-    Top = 64
+    Top = 68
     Width = 51
     Height = 13
     Caption = 'Apellidos *'
@@ -65,16 +65,16 @@
   object NombreUsuarioLabel: TLabel
     Left = 32
     Top = 136
-    Width = 91
+    Width = 100
     Height = 13
-    Caption = 'Nombre de Usuario'
+    Caption = 'Nombre de Usuario *'
   end
   object ContraseñaLabel: TLabel
     Left = 32
     Top = 317
-    Width = 56
+    Width = 65
     Height = 13
-    Caption = 'Contrase'#241'a'
+    Caption = 'Contrase'#241'a *'
   end
   object CalleLabel: TLabel
     Left = 232
@@ -133,14 +133,16 @@
     Top = 155
     Width = 169
     Height = 21
-    TabOrder = 3
+    Hint = 'yyyy-mm-dd'
+    TabOrder = 4
+    TextHint = 'yyyy-mm-dd'
   end
   object TelefonoCelularTF: TEdit
     Left = 232
     Top = 280
     Width = 169
     Height = 21
-    TabOrder = 4
+    TabOrder = 11
   end
   object CorreoTF: TEdit
     Left = 432
@@ -161,56 +163,58 @@
     Top = 280
     Width = 169
     Height = 21
-    TabOrder = 7
+    TabOrder = 10
   end
   object NombreUsuarioTF: TEdit
     Left = 32
     Top = 155
     Width = 169
     Height = 21
-    TabOrder = 8
+    TabOrder = 3
   end
-  object CrearCuentaBttn: TButton
+  object CrearCuentaBtn: TButton
     Left = 550
     Top = 360
     Width = 75
     Height = 25
     Caption = 'Crear Cuenta'
-    TabOrder = 9
+    TabOrder = 14
+    OnClick = CrearCuentaBtnClick
   end
   object ContraseñaTF: TEdit
     Left = 32
     Top = 336
     Width = 169
     Height = 21
-    TabOrder = 10
+    PasswordChar = '*'
+    TabOrder = 13
   end
   object CalleTF: TEdit
     Left = 232
     Top = 219
     Width = 169
     Height = 21
-    TabOrder = 11
+    TabOrder = 7
   end
   object NumeroIntTF: TEdit
     Left = 550
     Top = 219
     Width = 75
     Height = 21
-    TabOrder = 12
+    TabOrder = 9
   end
   object NumeroExtTF: TEdit
     Left = 432
     Top = 219
     Width = 73
     Height = 21
-    TabOrder = 13
+    TabOrder = 8
   end
   object TelefonoCasaTF: TEdit
     Left = 432
     Top = 280
     Width = 193
     Height = 21
-    TabOrder = 14
+    TabOrder = 12
   end
 end
