@@ -35,7 +35,17 @@ end;
 
 procedure TRegisterCardForm.TarjetaCreditoBttnClick(Sender: TObject);
 begin
-  // TODO: Create credit card and send api request.
+  try
+  begin
+    _account.RegisterCreditCard;
+    ShowMessage('Tarjeta registrada.');
+    Close;
+  end;
+  except
+    on ex: Exception do begin
+      ShowMessage(ex.Message);
+    end;
+  end;
 end;
 
 procedure TRegisterCardForm.TarjetaDebitoBttnClick(Sender: TObject);
@@ -52,5 +62,4 @@ begin
     end;
   end;
 end;
-
 end.
