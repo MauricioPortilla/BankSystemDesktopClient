@@ -11,6 +11,7 @@ object checkAccountStatementForm: TcheckAccountStatementForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
   PixelsPerInch = 96
   TextHeight = 13
   object welcomeLabel: TLabel
@@ -96,8 +97,6 @@ object checkAccountStatementForm: TcheckAccountStatementForm
       Color = 13750737
       ParentBackground = False
       TabOrder = 0
-      ExplicitLeft = 0
-      ExplicitTop = 0
       object transactionLabel: TLabel
         Left = 10
         Top = 8

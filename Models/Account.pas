@@ -165,7 +165,6 @@ var
   postResult: THttpResponse;
   format: TFormatSettings;
   creditCard: TCreditCard;
-  creditCardType :TCreditCardType;
 begin
   format := TFormatSettings.Create;
   format.ShortDateFormat := 'yyyy-mm-dd';
@@ -173,7 +172,7 @@ begin
 
   params := TJSONObject.Create;
   postResult := THttpRest.SendPost('/account/' + _id.ToString + '/card/credit/register', params);
-  TCreditCard.Create(
+  creditCard := TCreditCard.Create(
     postResult.Data.FindValue('cardId').Value.ToInteger,
     postResult.Data.FindValue('card').FindValue('cardNumber').Value,
     postResult.Data.FindValue('card').FindValue('cvv').Value.ToInteger,
@@ -181,14 +180,14 @@ begin
     0,
     StrToDateTime(postResult.Data.FindValue('card').FindValue('createdAt').Value, format),
     CARD_STATUS(postResult.Data.FindValue('card').FindValue('status').Value.ToInteger),
-    postResult.Data.FindValue('card').FindValue('credit').Value.ToDouble,
+    postResult.Data.FindValue('credit').Value.ToDouble,
     postResult.Data.FindValue('positiveBalance').Value.ToDouble,
     TCreditCardType.Create(
-      postResult.Data.FindValue('creditCardType').FindValue('fundingLevel').Value,
-      postResult.Data.FindValue('creditCardType').FindValue('interestRate').Value.ToDouble,
-      postResult.Data.FindValue('creditCardType').FindValue('credit').Value.ToDouble
+      postResult.Data.FindValue('credit_card_type').FindValue('fundingLevel').Value,
+      postResult.Data.FindValue('credit_card_type').FindValue('interestRate').Value.ToDouble,
+      postResult.Data.FindValue('credit_card_type').FindValue('credit').Value.ToDouble
     )
- );
+  );
   Result := creditCard;
 end;
 end.
