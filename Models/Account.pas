@@ -179,15 +179,15 @@ begin
     postResult.Data.FindValue('card').FindValue('cvv').Value.ToInteger,
     StrToDate(postResult.Data.FindValue('card').FindValue('expirationDate').Value, format),
     0,
-    postResult.Data.FindValue('card').FindValue('pin').Value.ToInteger,
     StrToDateTime(postResult.Data.FindValue('card').FindValue('createdAt').Value, format),
     CARD_STATUS(postResult.Data.FindValue('card').FindValue('status').Value.ToInteger),
     postResult.Data.FindValue('card').FindValue('credit').Value.ToDouble,
     postResult.Data.FindValue('positiveBalance').Value.ToDouble,
-  TCreditCardType.Create(
-    postResult.Data.FindValue('creditCardType').FindValue('fundingLevel').Value,
-    postResult.Data.FindValue('creditCardType').FindValue('credit').Value
-  )
+    TCreditCardType.Create(
+      postResult.Data.FindValue('creditCardType').FindValue('fundingLevel').Value,
+      postResult.Data.FindValue('creditCardType').FindValue('interestRate').Value.ToDouble,
+      postResult.Data.FindValue('creditCardType').FindValue('credit').Value.ToDouble
+    )
  );
   Result := creditCard;
 end;
