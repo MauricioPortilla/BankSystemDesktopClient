@@ -11,42 +11,15 @@ object CheckAccountForm: TCheckAccountForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object welcomeLabel: TLabel
-    Left = 8
-    Top = 47
-    Width = 50
+  object IdAccountLabel: TLabel
+    Left = 16
+    Top = 63
+    Width = 199
     Height = 13
-    Caption = 'Welcome, '
-  end
-  object nameLabel: TLabel
-    Left = 64
-    Top = 47
-    Width = 27
-    Height = 13
-    Caption = 'Name'
-  end
-  object cardNumberLabel: TLabel
-    Left = 28
-    Top = 112
-    Width = 105
-    Height = 13
-    Caption = '0000 0000 0000 0000'
-  end
-  object cardType: TLabel
-    Left = 28
-    Top = 131
-    Width = 50
-    Height = 13
-    Caption = 'Card Type'
-  end
-  object cardBalance: TLabel
-    Left = 424
-    Top = 120
-    Width = 54
-    Height = 13
-    Caption = '000000000'
+    Caption = 'Introduzca el ID de la cuenta a consultar:'
   end
   object bankSystemPanel: TPanel
     Left = 0
@@ -57,19 +30,37 @@ object CheckAccountForm: TCheckAccountForm
     Color = 921596
     ParentBackground = False
     TabOrder = 0
-    object bankSystemLabel: TLabel
-      Left = 16
-      Top = 14
-      Width = 61
-      Height = 13
+    object AccountNameLabel: TLabel
+      Left = 390
+      Top = 10
+      Width = 99
+      Height = 18
+      Alignment = taRightJustify
+      Caption = 'Atendiendo: '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -16
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
+    end
+    object BankSystemLabel: TLabel
+      Left = 8
+      Top = 6
+      Width = 124
+      Height = 23
       Caption = 'Bank System'
-      Color = clWhite
-      ParentColor = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -20
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
     end
   end
   object accountsPanel: TPanel
     Left = 16
-    Top = 74
+    Top = 90
     Width = 473
     Height = 23
     Margins.Left = 0
@@ -88,5 +79,41 @@ object CheckAccountForm: TCheckAccountForm
     Height = 25
     Caption = 'Check account statement'
     TabOrder = 2
+  end
+  object AccountsListView: TListView
+    Left = 16
+    Top = 112
+    Width = 473
+    Height = 98
+    Columns = <
+      item
+        Caption = 'Tipo'
+      end
+      item
+        Caption = 'N'#250'mero de tarjeta'
+      end
+      item
+        Caption = 'Saldo'
+      end>
+    ColumnClick = False
+    Ctl3D = False
+    TabOrder = 3
+    ViewStyle = vsReport
+  end
+  object AccountIdTF: TEdit
+    Left = 221
+    Top = 60
+    Width = 60
+    Height = 21
+    TabOrder = 4
+  end
+  object GetCardsButton: TButton
+    Left = 376
+    Top = 60
+    Width = 113
+    Height = 27
+    Caption = 'Consultar cuenta'
+    TabOrder = 5
+    OnClick = GetCardsButtonClick
   end
 end

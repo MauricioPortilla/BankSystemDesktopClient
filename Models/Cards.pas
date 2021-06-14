@@ -21,6 +21,8 @@ type
       class function GetByCardNumber(const cardNumber: string): TCard;
   end;
 
+  TCardArray = array of TCard;
+
   TDebitCard = class(TCard)
     private
       _balance: double;
@@ -35,6 +37,7 @@ type
         const status: CARD_STATUS;
         const balance: double
       );
+      property Balance: double read _balance;
   end;
 
   TCreditCardType = class
@@ -70,6 +73,7 @@ type
         const creditCardType: TCreditCardType
       );
       property CreditCardType: TCreditCardType read _creditCardType;
+      property Credit: double read _credit;
       function GetDebt(): TJSONValue;
   end;
 
@@ -87,10 +91,8 @@ begin
   if request.Data.FindValue('type').Value.ToInteger = integer(CARD_TYPE.CREDIT) then
     Result := TCreditCard.Create(
       request.Data.FindValue('cardId').Value.ToInteger,
-      request.Data.FindValue('cardNumber').Value,
-      0,
-      StrToDateTime(request.Data.FindValue('expirationDate').Value, format),
-      0,
+      request.Data.FindValue('cardNumber').Value,0,
+      StrToDateTime(request.Data.FindValue('expirationDate').Value, format),0,
       StrToDateTime(request.Data.FindValue('createdAt').Value, format),
       CARD_STATUS(request.Data.FindValue('status').Value.ToInteger),
       request.Data.FindValue('credit').Value.ToDouble,

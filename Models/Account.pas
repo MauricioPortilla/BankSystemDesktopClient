@@ -35,6 +35,7 @@ type
       procedure Register;
       function RegisterDebitCard(): TDebitCard;
       function RegisterCreditCard(): TCreditCard;
+      class function GetCards(const accountId: string): TCardArray;
     published
       constructor Create(
         const email: string;
@@ -189,6 +190,48 @@ begin
     )
   );
   Result := creditCard;
+end;
+
+class function TAccount.GetCards(const accountId: string): TCardArray;
+var
+  dataArray: TJSONArray;
+  cards: TCardArray;
+  request: THttpResponse;
+  format: TFormatSettings;
+  i : integer;
+begin
+  request := THttpRest.SendGet('/account/' + accountId + '/cards/get');
+  format := TFormatSettings.Create;
+  format.ShortDateFormat := 'yyyy-mm-dd';
+  format.DateSeparator := '-';
+  dataArray := request.Data as TJSONArray;
+  SetLength(cards, dataArray.Count);
+  for i := 0 to dataArray.Count - 1 do
+    if dataArray.Items[i].FindValue('type').Value.ToInteger = integer(CARD_TYPE.CREDIT) then
+        
+        cards[i] := TCreditCard.Create(
+        dataArray.Items[i].FindValue('cardId').Value.ToInteger,
+        dataArray.Items[i].FindValue('cardNumber').Value,
+        dataArray.Items[i].FindValue('cvv').Value.ToInteger,
+        StrToDateTime(dataArray.Items[i].FindValue('expirationDate').Value, format), 
+        0,
+        StrToDateTime(dataArray.Items[i].FindValue('createdAt').Value, format),
+        CARD_STATUS(dataArray.Items[i].FindValue('status').Value.ToInteger),
+        dataArray.Items[i].FindValue('credit').Value.ToDouble,
+        dataArray.Items[i].FindValue('positiveBalance').Value.ToDouble,
+        TCreditCardType.Create('type', 0.015, 8000)
+      )       
+    else
+        cards[i] := TDebitCard.Create(
+        dataArray.Items[i].FindValue('cardId').Value.ToInteger,
+        dataArray.Items[i].FindValue('cardNumber').Value,
+        dataArray.Items[i].FindValue('cvv').Value.ToInteger,
+        StrToDateTime(dataArray.Items[i].FindValue('expirationDate').Value, format), 
+        0,
+        StrToDateTime(dataArray.Items[i].FindValue('createdAt').Value, format),
+        CARD_STATUS(dataArray.Items[i].FindValue('status').Value.ToInteger),
+        dataArray.Items[i].FindValue('balance').Value.ToDouble);
+      Result := cards;
 end;
 end.
 
