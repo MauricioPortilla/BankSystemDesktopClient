@@ -15,7 +15,6 @@ uses
   RegisterCard in 'RegisterCard.pas' {RegisterCardForm},
   CheckAccount in 'CheckAccount.pas' {CheckAccountForm},
   CheckAccountStatement in 'CheckAccountStatement.pas' {checkAccountStatementForm},
-  CheckAccountStatementSelectionProcess in 'CheckAccountStatementSelectionProcess.pas' {checkAccountStatementSelectionProcessForm},
   Account in 'Models\Account.pas',
   Enums in 'Enums.pas',
   ExecutiveMenu in 'ExecutiveMenu.pas' {ExecutiveMenuForm};
@@ -35,7 +34,6 @@ begin
   Application.CreateForm(TRegisterCardForm, RegisterCardForm);
   Application.CreateForm(TCheckAccountForm, CheckAccountForm);
   Application.CreateForm(TcheckAccountStatementForm, checkAccountStatementForm);
-  Application.CreateForm(TcheckAccountStatementSelectionProcessForm, checkAccountStatementSelectionProcessForm);
   Application.CreateForm(TExecutiveMenuForm, ExecutiveMenuForm);
   Application.Run;
 end.

@@ -133,10 +133,6 @@
             <Form>checkAccountStatementForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="CheckAccountStatementSelectionProcess.pas">
-            <Form>checkAccountStatementSelectionProcessForm</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="Models\Account.pas"/>
         <DCCReference Include="Enums.pas"/>
         <DCCReference Include="ExecutiveMenu.pas">

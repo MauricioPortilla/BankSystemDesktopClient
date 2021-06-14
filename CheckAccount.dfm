@@ -73,12 +73,13 @@ object CheckAccountForm: TCheckAccountForm
     TabOrder = 1
   end
   object checkAccountStatementButton: TButton
-    Left = 336
+    Left = 344
     Top = 216
     Width = 153
     Height = 25
     Caption = 'Check account statement'
     TabOrder = 2
+    OnClick = checkAccountStatementButtonClick
   end
   object AccountsListView: TListView
     Left = 16
@@ -88,12 +89,15 @@ object CheckAccountForm: TCheckAccountForm
     Columns = <
       item
         Caption = 'Tipo'
+        Width = 45
       end
       item
         Caption = 'N'#250'mero de tarjeta'
+        Width = 350
       end
       item
         Caption = 'Saldo'
+        Width = 75
       end>
     ColumnClick = False
     Ctl3D = False

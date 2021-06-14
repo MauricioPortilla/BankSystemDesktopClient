@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls, Account, RegularExpressions, Cards, Transaction, Enums;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls, Account,
+  RegularExpressions, Cards, Transaction, Enums, CheckAccountStatement;
 
 type
   TCheckAccountForm = class(TForm)
@@ -18,8 +19,11 @@ type
     GetCardsButton: TButton;
     procedure FormCreate(Sender: TObject);
     procedure GetCardsButtonClick (Sender: TObject);
+    procedure checkAccountStatementButtonClick(Sender: TObject);
   private
-    { Private declarations }
+    cards: TCardArray;
+    debitCardAux: TDebitCard;
+    creditCardAux: TCreditcard;
   public
 
   end;
@@ -41,10 +45,7 @@ procedure TCheckAccountForm.GetCardsButtonClick(Sender: TObject);
 var
   Itm: TListItem;
   account: TAccount;
-  cards: TCardArray;
   cardAux : TCard;
-  debitCardAux: TDebitCard;
-  creditCardAux: TCreditcard;
 begin
   AccountsListView.Clear;
   if (AccountIdTF.Text = '') then
@@ -80,5 +81,22 @@ begin
         ShowMessage(ex.ToString);
       end;
     end;
+    debitCardAux:= nil;
+    creditCardAux:= nil;
+end;
+
+procedure TCheckAccountForm.checkAccountStatementButtonClick(Sender: TObject);
+begin
+   if AccountsListView.ItemIndex = -1 then
+   begin
+    ShowMessage('Seleccione una tarjeta de la tabla.');
+    exit;
+   end
+   else
+   begin
+    checkAccountStatementForm := TCheckAccountStatementForm.Create(Application, cards[AccountsListView.ItemIndex]);
+    checkAccountStatementForm.ShowModal;
+    checkAccountStatementForm.Release;
+   end;
 end;
 end.
