@@ -4,14 +4,17 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Account;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Account, RegisterCardFinish,
+  Cards;
 
 type
   TRegisterCardForm = class(TForm)
-    SystemBankPanel: TPanel;
     ChooseCardLabel: TLabel;
     TarjetaDebitoBttn: TButton;
     TarjetaCreditoBttn: TButton;
+    BankSystemPanel: TPanel;
+    Label4: TLabel;
+    AccountNameLabel: TLabel;
     procedure TarjetaDebitoBttnClick(Sender: TObject);
     procedure TarjetaCreditoBttnClick(Sender: TObject);
   private
@@ -31,14 +34,21 @@ constructor TRegisterCardForm.Create(AOwner: TComponent; account: TAccount);
 begin
   inherited Create(AOwner);
   _account := account;
+  if TAccount.Current <> nil then
+    AccountNameLabel.Caption := AccountNameLabel.Caption + TAccount.Current.Name;
 end;
 
 procedure TRegisterCardForm.TarjetaCreditoBttnClick(Sender: TObject);
+var
+  form: TRegisterCardFinishForm;
+  card: TCreditCard;
 begin
   try
   begin
-    _account.RegisterCreditCard;
-    ShowMessage('Tarjeta registrada.');
+    card := _account.RegisterCreditCard;
+    form := TRegisterCardFinishForm.Create(Application, card);
+    form.ShowModal;
+    form.Release;
     Close;
   end;
   except
@@ -49,11 +59,16 @@ begin
 end;
 
 procedure TRegisterCardForm.TarjetaDebitoBttnClick(Sender: TObject);
+var
+  form: TRegisterCardFinishForm;
+  card: TDebitCard;
 begin
   try
   begin
-    _account.RegisterDebitCard;
-    ShowMessage('Tarjeta registrada.');
+    card := _account.RegisterDebitCard;
+    form := TRegisterCardFinishForm.Create(Application, card);
+    form.ShowModal;
+    form.Release;
     Close;
   end;
   except

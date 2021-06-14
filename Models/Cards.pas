@@ -18,6 +18,9 @@ type
     public
       property CardId: integer read _cardId write _cardId;
       property CardNumber: string read _cardNumber;
+      property Cvv: integer read _cvv;
+      property ExpirationDate: TDate read _expirationDate;
+      property CreatedAt: TDateTime read _createdAt;
       class function GetByCardNumber(const cardNumber: string): TCard;
   end;
 

@@ -97,6 +97,7 @@ begin
     registerCardForm := TRegisterCardForm.Create(Application, account);
     registerCardForm.ShowModal;
     registerCardForm.Release;
+    Close;
   except
     on ex: Exception do begin
       ShowMessage(ex.Message);
