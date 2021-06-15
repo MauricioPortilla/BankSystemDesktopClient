@@ -28,19 +28,12 @@ object checkAccountStatementForm: TcheckAccountStatementForm
     Font.Style = []
     ParentFont = False
   end
-  object AccountNameLabel: TLabel
-    Left = 390
-    Top = 10
-    Width = 99
-    Height = 18
-    Alignment = taRightJustify
-    Caption = 'Atendiendo: '
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWhite
-    Font.Height = -16
-    Font.Name = 'Lucida Sans'
-    Font.Style = []
-    ParentFont = False
+  object TLabel
+    Left = 16
+    Top = 135
+    Width = 169
+    Height = 13
+    Caption = 'Seleccione el mes y escriba un a'#241'o:'
   end
   object bankSystemPanel: TPanel
     Left = 0
@@ -51,6 +44,8 @@ object checkAccountStatementForm: TcheckAccountStatementForm
     Color = 253
     ParentBackground = False
     TabOrder = 0
+    ExplicitLeft = 8
+    ExplicitTop = 6
     object Label1: TLabel
       Left = 8
       Top = 6
@@ -64,7 +59,7 @@ object checkAccountStatementForm: TcheckAccountStatementForm
       Font.Style = []
       ParentFont = False
     end
-    object Label2: TLabel
+    object AccountNameLabel: TLabel
       Left = 390
       Top = 10
       Width = 99
@@ -119,7 +114,7 @@ object checkAccountStatementForm: TcheckAccountStatementForm
       Left = 374
       Top = 24
       Width = 90
-      Height = 13
+      Height = 17
       Caption = '000000000000000'
     end
     object AmountTypeLabel: TLabel
@@ -130,47 +125,36 @@ object checkAccountStatementForm: TcheckAccountStatementForm
       Caption = 'amountype'
     end
   end
-  object yearComboBox: TComboBox
-    Left = 167
-    Top = 145
+  object monthComboBox: TComboBox
+    AlignWithMargins = True
+    Left = 16
+    Top = 154
     Width = 145
     Height = 21
     TabOrder = 3
-    Text = 'Select a year'
+    Text = 'Selecciona un mes'
     Items.Strings = (
-      '2021'
-      '2020'
-      '2019'
-      '2018')
-  end
-  object monthComboBox: TComboBox
-    Left = 16
-    Top = 143
-    Width = 145
-    Height = 21
-    TabOrder = 4
-    Text = 'Select a Month'
-    Items.Strings = (
-      'January'
-      'February'
-      'March'
-      'April'
-      'May'
-      'June'
-      'July'
-      'August'
-      'September'
-      'October'
-      'November'
-      'December')
+      'Enero'
+      'Febrero'
+      'Marzo'
+      'Abril'
+      'Mayo'
+      'Junio'
+      'Julio'
+      'Agosto'
+      'Septiembre'
+      'Octubre'
+      'Noviembre'
+      'Diciembre')
   end
   object checkAccountStatementButton: TButton
-    Left = 335
-    Top = 141
-    Width = 153
-    Height = 25
-    Caption = 'Check account statement'
-    TabOrder = 5
+    Left = 344
+    Top = 154
+    Width = 144
+    Height = 21
+    Caption = 'Consultar estado de cuenta'
+    TabOrder = 4
+    OnClick = checkAccountStatementButtonClick
   end
   object Panel2: TPanel
     Left = 16
@@ -184,29 +168,42 @@ object checkAccountStatementForm: TcheckAccountStatementForm
     Caption = 'Cuenta'
     Color = 13750737
     ParentBackground = False
-    TabOrder = 6
+    TabOrder = 5
   end
-  object AccountsListView: TListView
+  object TransactionsListView: TListView
     Left = 16
     Top = 204
     Width = 472
     Height = 269
     Columns = <
       item
+        Caption = 'Fecha'
+        Width = 45
+      end
+      item
+        Caption = 'Concepto'
+        Width = 45
+      end
+      item
         Caption = 'Tipo'
         Width = 45
       end
       item
-        Caption = 'N'#250'mero de tarjeta'
-        Width = 350
+        Caption = 'Referencia'
       end
       item
-        Caption = 'Saldo'
-        Width = 75
+        Caption = 'Monto'
       end>
     ColumnClick = False
     Ctl3D = False
-    TabOrder = 7
+    TabOrder = 6
     ViewStyle = vsReport
+  end
+  object YearTF: TEdit
+    Left = 184
+    Top = 154
+    Width = 137
+    Height = 21
+    TabOrder = 7
   end
 end

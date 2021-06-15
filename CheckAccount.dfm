@@ -11,6 +11,7 @@ object CheckAccountForm: TCheckAccountForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -77,7 +78,7 @@ object CheckAccountForm: TCheckAccountForm
     Top = 216
     Width = 153
     Height = 25
-    Caption = 'Check account statement'
+    Caption = 'Consultar estado de cuenta'
     TabOrder = 2
     OnClick = checkAccountStatementButtonClick
   end

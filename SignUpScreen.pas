@@ -37,7 +37,12 @@ type
     NumeroExtTF: TEdit;
     TelefonoCasaLabel: TLabel;
     TelefonoCasaTF: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    AccountNameLabel: TLabel;
     procedure CrearCuentaBtnClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -104,4 +109,10 @@ begin
     end;
   end;
 end;
+procedure TSignUpForm.FormCreate(Sender: TObject);
+begin
+  if TAccount.Current <> nil then
+  AccountNameLabel.Caption := AccountNameLabel.Caption + TAccount.Current.Name;
+end;
+
 end.

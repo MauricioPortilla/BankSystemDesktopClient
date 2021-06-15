@@ -3,8 +3,8 @@ unit CheckAccountStatement;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls, Cards, Account;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Enums,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls, Cards, Account, Transaction;
 
 type
   TCheckAccountStatementForm = class(TForm)
@@ -12,7 +12,6 @@ type
     BankSystemLabel: TLabel;
     AccountNameLabel: TLabel;
     monthComboBox: TComboBox;
-    yearComboBox: TComboBox;
     AccountStatementPanel: TPanel;
     checkAccountStatementButton: TButton;
     Panel2: TPanel;
@@ -20,12 +19,15 @@ type
     CardNumberLabel: TLabel;
     CardAmountLabel: TLabel;
     AmountTypeLabel: TLabel;
-    AccountsListView: TListView;
+    TransactionsListView: TListView;
+    YearTF: TEdit;
     procedure FormCreate(Sender: TObject);
+    procedure checkAccountStatementButtonClick(Sender: TObject);
   private
     _card: TCard;
     creditCard : TCreditCard;
     debitCard : TDebitCard;
+    transactions : TTransactionArray;
   public
     constructor Create(AOwner: TComponent; const card: TCard); reintroduce; overload;
   end;
@@ -46,9 +48,7 @@ end;
 procedure TCheckAccountStatementForm.FormCreate(Sender: TObject);
 begin
   if TAccount.Current <> nil then
-  begin
-    AccountNameLabel.Caption := AccountNameLabel.Caption + TAccount.Current.Name;
-  end;
+  AccountNameLabel.Caption := AccountNameLabel.Caption + TAccount.Current.Name;
 
   if _card is TCreditCard then
   begin
@@ -68,4 +68,54 @@ begin
   end;
 end;
 
+procedure TCheckAccountStatementForm.checkAccountStatementButtonClick(Sender: TObject);
+var
+  Itm: TListItem;
+  transactionAux: TTransaction;
+begin
+  TransactionsListView.Clear;
+   if monthComboBox.ItemIndex = -1 then
+   begin
+    ShowMessage('Seleccione un mes.');
+    exit;
+   end
+   else if YearTF.Text = '' then
+   begin
+    ShowMessage('Escriba un año.');
+    exit;
+   end
+   else
+   begin
+     try
+      transactions:= _card.GetCardTransactionsByDate(_card.CardId,YearTF.Text, monthComboBox.ItemIndex + 1);
+      TransactionsListView.Items.BeginUpdate;
+      for transactionAux in transactions do
+      begin
+        Itm := TransactionsListView.Items.Add;
+        Itm.Caption := DateTimeToStr(transactionAux.CreatedAt);
+        Itm.SubItems.Add(transactionAux.Concept);
+        if transactionAux.TypeT = TRANSACTION_TYPE.TRANSFER_OF_FUNDS then
+          begin
+            Itm.SubItems.Add('Transferencia de fondos');
+          end
+        else if transactionAux.TypeT = TRANSACTION_TYPE.DEPOSIT then
+          Itm.SubItems.Add('Deposito')
+        else if transactionAux.TypeT = TRANSACTION_TYPE.WITHDRAWAL  then
+          Itm.SubItems.Add('Retiro de fondos')
+        else if transactionAux.TypeT = TRANSACTION_TYPE.PAYMENT   then
+          Itm.SubItems.Add('Pago')
+        else if transactionAux.TypeT = TRANSACTION_TYPE.MONTHLY_PAYMENT   then
+          Itm.SubItems.Add('Pago mensual');
+        Itm.SubItems.Add(transactionAux.Reference);
+        Itm.SubItems.Add(transactionAux.Amount.ToString);
+      end;
+      TransactionsListView.Items.EndUpdate;
+    except
+      on ex: Exception do begin
+        ShowMessage(ex.ToString);
+      end;
+    end;
+   end;
+
+end;
 end.

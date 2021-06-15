@@ -12,6 +12,7 @@
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object NombreLabel: TLabel
@@ -105,6 +106,33 @@
     Height = 13
     Caption = 'Tel'#233'fono *'
   end
+  object Label1: TLabel
+    Left = 8
+    Top = 6
+    Width = 124
+    Height = 23
+    Caption = 'Bank System'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -20
+    Font.Name = 'Lucida Sans'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 390
+    Top = 10
+    Width = 99
+    Height = 18
+    Alignment = taRightJustify
+    Caption = 'Atendiendo: '
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -16
+    Font.Name = 'Lucida Sans'
+    Font.Style = []
+    ParentFont = False
+  end
   object BankSystemPanel: TPanel
     Left = 0
     Top = 0
@@ -114,6 +142,35 @@
     Color = 1842417
     ParentBackground = False
     TabOrder = 0
+    object Label3: TLabel
+      Left = 16
+      Top = 6
+      Width = 124
+      Height = 23
+      Caption = 'Bank System'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -20
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentFont = False
+    end
+    object AccountNameLabel: TLabel
+      Left = 550
+      Top = 10
+      Width = 99
+      Height = 18
+      Alignment = taRightJustify
+      Caption = 'Atendiendo: '
+      Color = 1974001
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -16
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+    end
   end
   object NombreTF: TEdit
     Left = 32

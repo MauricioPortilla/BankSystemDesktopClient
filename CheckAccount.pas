@@ -44,18 +44,17 @@ end;
 procedure TCheckAccountForm.GetCardsButtonClick(Sender: TObject);
 var
   Itm: TListItem;
-  account: TAccount;
   cardAux : TCard;
 begin
   AccountsListView.Clear;
   if (AccountIdTF.Text = '') then
     begin
-      ShowMessage('Faltan campos por completar.');
+      ShowMessage('Escriba el ID a consultar.');
       exit;
     end
   else
     try
-      cards:= account.GetCards(AccountIdTF.Text);
+      cards:= TAccount.GetCards(AccountIdTF.Text);
       AccountsListView.Items.BeginUpdate;
       for cardAux in cards do
       if cardAux is TCreditCard then
